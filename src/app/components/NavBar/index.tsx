@@ -1,43 +1,41 @@
-import * as React from 'react';
-import styled from 'styled-components/macro';
-import { Logo } from './Logo';
-import { StyleConstants } from 'styles/StyleConstants';
-import { Nav } from './Nav';
+import React from 'react';
+import styled from 'styled-components';
+import { Searchbar } from 'app/components/Searchbar';
+import { HomeButton } from 'app/components/HomeButton';
 import { PageWrapper } from '../PageWrapper';
 
-export function NavBar() {
+export function Navbar() {
   return (
-    <Wrapper>
-      <PageWrapper>
-        <Logo />
-        <Nav />
-      </PageWrapper>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <PageWrapper>
+          <HomeButton></HomeButton>
+          <Searchbar></Searchbar>
+        </PageWrapper>
+      </Wrapper>
+    </>
   );
 }
 
 const Wrapper = styled.header`
-  box-shadow: 0 1px 0 0 ${p => p.theme.borderLight};
-  height: ${StyleConstants.NAV_BAR_HEIGHT};
+  height: 15vh;
+  width: 100vw;
+  background: -moz-linear-gradient(top, #142062 0%, #004ba8 72%);
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0%, #142062),
+    color-stop(72%, #004ba8)
+  );
+  background: -webkit-linear-gradient(top, #142062 0%, #004ba8 72%);
+  background: -o-linear-gradient(top, #142062 0%, #004ba8 72%);
+  background: -ms-linear-gradient(top, #142062 0%, #004ba8 72%);
+  background: linear-gradient(to bottom, #142062 0%, #004ba8 72%);
   display: flex;
-  position: fixed;
+  align-items: flex-end;
+  justify-content: flex-end;
   top: 0;
-  width: 100%;
-  background-color: ${p => p.theme.background};
-  z-index: 2;
-
-  @supports (backdrop-filter: blur(10px)) {
-    backdrop-filter: blur(10px);
-    background-color: ${p =>
-      p.theme.background.replace(
-        /rgba?(\(\s*\d+\s*,\s*\d+\s*,\s*\d+)(?:\s*,.+?)?\)/,
-        'rgba$1,0.75)',
-      )};
-  }
-
-  ${PageWrapper} {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  padding-bottom: 1em;
+  position: fixed;
 `;
