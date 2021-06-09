@@ -22,7 +22,7 @@ export function Searchbar() {
 const StyledPaper = styled(Paper)`
   padding: 2px 2px;
   display: flex;
-  float: right;
+  margin-right: 2em;
 `;
 
 const StyledInputBase = styled(InputBase)`

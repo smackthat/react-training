@@ -5,5 +5,6 @@
   You have to declare them here manually
 */
 export interface RootState {
+  user?: any;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

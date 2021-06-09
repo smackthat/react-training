@@ -14,7 +14,10 @@ import { GlobalStyle } from 'styles/global-styles';
 
 import { HomePage } from './pages/HomePage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
+import { LoginPage } from './pages/LoginPage/Loadable';
 import { useTranslation } from 'react-i18next';
+import { Navbar } from './components/Navbar';
+import { CategoriesBar } from './components/CategoriesBar';
 
 export function App() {
   const { i18n } = useTranslation();
@@ -28,7 +31,11 @@ export function App() {
         <meta name="description" content="A React Boilerplate application" />
       </Helmet>
 
+      <Navbar />
+      <CategoriesBar />
+
       <Switch>
+        <Route exact path="/login" component={LoginPage} />
         <Route exact path="/" component={HomePage} />
         <Route component={NotFoundPage} />
       </Switch>
