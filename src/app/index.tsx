@@ -18,6 +18,7 @@ import { LoginPage } from './pages/LoginPage/Loadable';
 import { useTranslation } from 'react-i18next';
 import { Navbar } from './components/Navbar';
 import { CategoriesBar } from './components/CategoriesBar';
+import { LogoutPage } from './pages/LogoutPage/Loadable';
 
 export function App() {
   const { i18n } = useTranslation();
@@ -36,6 +37,7 @@ export function App() {
 
       <Switch>
         <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/logout" component={LogoutPage} />
         <Route exact path="/" component={HomePage} />
         <Route component={NotFoundPage} />
       </Switch>

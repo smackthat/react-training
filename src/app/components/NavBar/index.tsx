@@ -5,8 +5,15 @@ import { HomeButton } from 'app/components/HomeButton';
 import { MiniCart } from 'app/components/MiniCart';
 import { PageWrapper } from '../PageWrapper';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectUserName } from 'app/pages/LoginPage/slice/selectors';
+import { useUserSlice } from 'app/pages/LoginPage/slice';
 
 export function Navbar() {
+  useUserSlice();
+
+  const userName: string = useSelector(selectUserName);
+
   return (
     <>
       <Wrapper>
@@ -15,8 +22,13 @@ export function Navbar() {
 
           <FloatRight>
             <Searchbar />
-            <MiniCart />
-            <StyledLink to="/login">Login</StyledLink>
+            {userName && userName.length > 0 && (
+              <>
+                <MiniCart />
+                <StyledLink to="/logout">Logout</StyledLink>
+              </>
+            )}
+            {!userName && <StyledLink to="/login">Login</StyledLink>}
           </FloatRight>
         </PageWrapper>
       </Wrapper>

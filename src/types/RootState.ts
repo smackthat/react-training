@@ -1,3 +1,4 @@
+import { User } from './User';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -5,6 +6,6 @@
   You have to declare them here manually
 */
 export interface RootState {
-  user?: any;
+  user: User;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
