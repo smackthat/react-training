@@ -6,13 +6,14 @@ import { MiniCart } from 'app/components/MiniCart';
 import { PageWrapper } from '../PageWrapper';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectUserName } from 'app/pages/LoginPage/slice/selectors';
+import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { useUserSlice } from 'app/pages/LoginPage/slice';
+import { User } from 'types/User';
 
 export function Navbar() {
   useUserSlice();
 
-  const userName: string = useSelector(selectUserName);
+  const loggedUser: User = useSelector(selectUser);
 
   return (
     <>
@@ -22,13 +23,13 @@ export function Navbar() {
 
           <FloatRight>
             <Searchbar />
-            {userName && userName.length > 0 && (
+            {loggedUser && (
               <>
                 <MiniCart />
                 <StyledLink to="/logout">Logout</StyledLink>
               </>
             )}
-            {!userName && <StyledLink to="/login">Login</StyledLink>}
+            {!loggedUser && <StyledLink to="/login">Login</StyledLink>}
           </FloatRight>
         </PageWrapper>
       </Wrapper>

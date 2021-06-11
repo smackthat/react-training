@@ -1,7 +1,22 @@
 export interface User {
-  name: string;
+  id: number;
+  userName: string;
+}
+
+interface CartItem {
+  productId: number;
+  quantity: number;
+}
+
+export interface Cart {
+  products: CartItem[];
+}
+
+export interface UserState {
+  user: User;
   loading: boolean;
-  error: UserErrorType;
+  error: UserErrorType[];
+  cart?: Cart;
 }
 
 export enum UserErrorType {

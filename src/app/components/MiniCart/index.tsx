@@ -5,9 +5,15 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import styled from 'styled-components';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
+import { useSelector } from 'react-redux';
+import { selectCart } from 'app/pages/LoginPage/slice/selectors';
+import { useUserSlice } from 'app/pages/LoginPage/slice';
 
 export function MiniCart() {
+  useUserSlice();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const cart = useSelector(selectCart);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -23,7 +29,7 @@ export function MiniCart() {
     <>
       <IconButton aria-label="cart" onClick={handleClick}>
         <StyledBadge
-          badgeContent={5}
+          badgeContent={cart ? cart.products.length : null}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
