@@ -1,10 +1,22 @@
+import { selectProducts } from 'app/pages/HomePage/slice/selectors';
 import { loginUser } from './utils';
 import { request } from 'utils/request';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { UserLogin, UserErrorType, User } from './../../../../types/User';
+import {
+  UserLogin,
+  UserErrorType,
+  User,
+  CartItem,
+} from './../../../../types/User';
 import { userActions } from '.';
 import { put, takeLatest, delay, select, call } from 'redux-saga/effects';
 import { selectUser } from './selectors';
+import { Product } from 'types/Product';
+
+interface CartItemFromAPI {
+  productId: number;
+  quantity: number;
+}
 
 const baseUrl: string = 'https://fakestoreapi.com';
 
@@ -66,12 +78,32 @@ function* getUserCart() {
 
   try {
     const url = `${baseUrl}/carts/user/${user.id}`;
-
     const cart = yield call(request, url);
+
+    const products: Product[] = yield select(selectProducts);
+
+    const mapCartItems: (
+      itemsFromAPI: CartItemFromAPI[],
+    ) => CartItem[] = items => {
+      let arr: CartItem[] = [];
+
+      for (let i = 0; i < items.length; i++) {
+        let item = products.find(x => x.id === items[i].productId);
+
+        arr.push({
+          productId: item.id,
+          title: item.title,
+          quantity: items[i].quantity,
+          sum: Math.round(item.price * items[i].quantity * 100) / 100,
+        });
+      }
+
+      return arr;
+    };
 
     yield put(
       userActions.setCart({
-        products: cart[0].products,
+        products: mapCartItems(cart[0].products),
       }),
     );
   } catch (error) {

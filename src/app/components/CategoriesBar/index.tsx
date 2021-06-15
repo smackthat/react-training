@@ -12,11 +12,11 @@ export function CategoriesBar() {
           <Items>
             <Item to="/boo">Electronics</Item>
             <StyledDivider orientation="vertical" flexItem />
-            <Item to="/">Jewelry</Item>
+            <Item to="/products">Jewelery</Item>
             <StyledDivider orientation="vertical" flexItem />
-            <Item to="/">Men's Clothing</Item>
+            <Item to="/products">Men's Clothing</Item>
             <StyledDivider orientation="vertical" flexItem />
-            <Item to="/">Women's Clothing</Item>
+            <Item to="/products">Women's Clothing</Item>
           </Items>
         </PageWrapper>
       </Wrapper>

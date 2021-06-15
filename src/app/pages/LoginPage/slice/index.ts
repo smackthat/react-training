@@ -4,11 +4,24 @@ import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 import { userSaga } from './saga';
 import { PayloadAction } from '@reduxjs/toolkit';
 
+const USER: string = 'user';
+const USERCART: string = 'usercart';
+
 const getUserFromStorage: () => User = () => {
-  const userFromStorage = localStorage.getItem('user');
+  const userFromStorage = localStorage.getItem(USER);
 
   if (userFromStorage) {
     return JSON.parse(userFromStorage);
+  }
+
+  return null;
+};
+
+const getCartFromStorage: () => Cart = () => {
+  const cartFromStorage = localStorage.getItem(USERCART);
+
+  if (cartFromStorage) {
+    return JSON.parse(cartFromStorage);
   }
 
   return null;
@@ -18,6 +31,7 @@ export const initialState: UserState = {
   user: getUserFromStorage(),
   loading: false,
   error: [],
+  cart: getCartFromStorage(),
 };
 
 const slice = createSlice({
@@ -33,7 +47,8 @@ const slice = createSlice({
     logoutUser(state) {
       state.user = null;
 
-      localStorage.removeItem('user');
+      localStorage.removeItem(USER);
+      localStorage.removeItem(USERCART);
     },
     userLoaded(state, action: PayloadAction<User>) {
       const user = action.payload;
@@ -43,7 +58,7 @@ const slice = createSlice({
       };
       state.loading = false;
 
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      localStorage.setItem(USER, JSON.stringify(action.payload));
     },
     userError(state, action: PayloadAction<UserErrorType>) {
       state.error.push(action.payload);
@@ -51,6 +66,8 @@ const slice = createSlice({
     },
     setCart(state, action: PayloadAction<Cart>) {
       state.cart = action.payload;
+
+      localStorage.setItem(USERCART, JSON.stringify(action.payload));
     },
   },
 });

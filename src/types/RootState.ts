@@ -1,3 +1,4 @@
+import { ProductsState } from './Product';
 import { UserState } from './User';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
@@ -7,5 +8,6 @@ import { UserState } from './User';
 */
 export interface RootState {
   userState: UserState;
+  productsState: ProductsState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

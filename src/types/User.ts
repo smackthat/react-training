@@ -3,9 +3,11 @@ export interface User {
   userName: string;
 }
 
-interface CartItem {
+export interface CartItem {
   productId: number;
+  title: string;
   quantity: number;
+  sum: number;
 }
 
 export interface Cart {
