@@ -10,7 +10,7 @@ import { UserErrorType, UserLogin } from 'types/User';
 import { Wrapper } from '../Wrapper';
 import { useUserSlice } from './slice';
 import { selectError, selectLoading, selectUser } from './slice/selectors';
-import { loginUser } from './slice/utils';
+import { loginUser } from './slice/actions';
 import { Redirect } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 

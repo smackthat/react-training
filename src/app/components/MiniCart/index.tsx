@@ -7,7 +7,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import styled from 'styled-components';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCart } from 'app/pages/LoginPage/slice/selectors';
 import { useUserSlice } from 'app/pages/LoginPage/slice';
 import Button from '@material-ui/core/Button';
@@ -17,7 +17,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
 export function MiniCart() {
-  useUserSlice();
+  const slice = useUserSlice();
+
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const cart = useSelector(selectCart);
@@ -30,6 +32,24 @@ export function MiniCart() {
     setAnchorEl(null);
   };
 
+  const handleProductIncrement = (id: number) => {
+    dispatch(
+      slice.actions.incrementCartItem({
+        productId: id,
+        quantity: 1,
+      }),
+    );
+  };
+
+  const handleProductDecrement = (id: number) => {
+    dispatch(
+      slice.actions.decrementCartItem({
+        productId: id,
+        quantity: 1,
+      }),
+    );
+  };
+
   const open = Boolean(anchorEl);
 
   return (
@@ -37,7 +57,7 @@ export function MiniCart() {
       <IconButton aria-label="cart" onClick={handleClick}>
         <StyledBadge
           badgeContent={
-            cart
+            cart && cart.products.length > 0
               ? cart.products.map(p => p.quantity).reduce((a, b) => a + b)
               : null
           }
@@ -55,48 +75,65 @@ export function MiniCart() {
           <Fade {...TransitionProps} timeout={100}>
             <ClickAwayListener onClickAway={handleClickAway}>
               <CartItems>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Title</TableCell>
-                      <TableCell align="right">Qty</TableCell>
-                      <TableCell align="right">Sum</TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {cart.products.map(item => (
-                      <TableRow key={item.productId}>
-                        <TableCell>{item.title}</TableCell>
-                        <TableCell align="right">{item.quantity}</TableCell>
-                        <TableCell align="right">{item.sum}</TableCell>
-                        <TableCell>
-                          <IconButton size="small">
-                            <AddIcon />
-                          </IconButton>
-                          <IconButton size="small">
-                            <RemoveIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                    <TableRow className="totals">
-                      <TableCell>Total</TableCell>
-                      <TableCell align="right">
-                        {cart.products
-                          .map(p => p.quantity)
-                          .reduce((a, b) => a + b)}
-                      </TableCell>
-                      <TableCell align="right">
-                        {cart.products.map(p => p.sum).reduce((a, b) => a + b)}
-                      </TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-                <Button variant="outlined" color="primary">
-                  Go to checkout
-                </Button>
+                {cart && cart.products.length > 0 && (
+                  <>
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Title</TableCell>
+                          <TableCell align="right">Qty</TableCell>
+                          <TableCell align="right">Sum</TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {cart.products.map(item => (
+                          <TableRow key={item.productId}>
+                            <TableCell>{item.title}</TableCell>
+                            <TableCell align="right">{item.quantity}</TableCell>
+                            <TableCell align="right">{item.sum}</TableCell>
+                            <TableCell>
+                              <IconButton
+                                size="small"
+                                onClick={() =>
+                                  handleProductIncrement(item.productId)
+                                }
+                              >
+                                <AddIcon />
+                              </IconButton>
+                              <IconButton
+                                size="small"
+                                onClick={() =>
+                                  handleProductDecrement(item.productId)
+                                }
+                              >
+                                <RemoveIcon />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="totals">
+                          <TableCell>Total</TableCell>
+                          <TableCell align="right">
+                            {cart.products
+                              .map(p => p.quantity)
+                              .reduce((a, b) => a + b)}
+                          </TableCell>
+                          <TableCell align="right">
+                            {cart.products
+                              .map(p => p.sum)
+                              .reduce((a, b) => a + b)}
+                          </TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                    <Button variant="outlined" color="primary">
+                      Go to checkout
+                    </Button>
+                  </>
+                )}
+                {cart && cart.products.length === 0 && <h3>No items</h3>}
               </CartItems>
             </ClickAwayListener>
           </Fade>

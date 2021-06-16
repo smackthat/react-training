@@ -7,13 +7,13 @@ import { productsSaga } from './saga';
 const PRODUCTS: string = 'products';
 
 const getProductsFromStorage: () => Product[] = () => {
-  const fromStorage = localStorage.getItem(PRODUCTS);
+  const fromStorage = sessionStorage.getItem(PRODUCTS);
 
   if (fromStorage) {
     return JSON.parse(fromStorage);
   }
 
-  return null;
+  return [];
 };
 
 export const initialState: ProductsState = {
@@ -36,7 +36,7 @@ const slice = createSlice({
       state.products = action.payload;
       state.loading = false;
 
-      localStorage.setItem(PRODUCTS, JSON.stringify(action.payload));
+      sessionStorage.setItem(PRODUCTS, JSON.stringify(action.payload));
     },
     onError(state) {
       state.error = true;

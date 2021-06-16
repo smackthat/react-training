@@ -1,5 +1,5 @@
 import { selectProducts } from 'app/pages/HomePage/slice/selectors';
-import { loginUser } from './utils';
+import { loginUser } from './actions';
 import { request } from 'utils/request';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
@@ -7,16 +7,12 @@ import {
   UserErrorType,
   User,
   CartItem,
+  ItemAndQuantity,
 } from './../../../../types/User';
 import { userActions } from '.';
 import { put, takeLatest, delay, select, call } from 'redux-saga/effects';
 import { selectUser } from './selectors';
 import { Product } from 'types/Product';
-
-interface CartItemFromAPI {
-  productId: number;
-  quantity: number;
-}
 
 const baseUrl: string = 'https://fakestoreapi.com';
 
@@ -83,7 +79,7 @@ function* getUserCart() {
     const products: Product[] = yield select(selectProducts);
 
     const mapCartItems: (
-      itemsFromAPI: CartItemFromAPI[],
+      itemsFromAPI: ItemAndQuantity[],
     ) => CartItem[] = items => {
       let arr: CartItem[] = [];
 

@@ -1,5 +1,11 @@
 import { createSlice } from './../../../../utils/@reduxjs/toolkit';
-import { UserState, UserErrorType, User, Cart } from './../../../../types/User';
+import {
+  UserState,
+  UserErrorType,
+  User,
+  Cart,
+  ItemAndQuantity,
+} from './../../../../types/User';
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 import { userSaga } from './saga';
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -8,7 +14,7 @@ const USER: string = 'user';
 const USERCART: string = 'usercart';
 
 const getUserFromStorage: () => User = () => {
-  const userFromStorage = localStorage.getItem(USER);
+  const userFromStorage = sessionStorage.getItem(USER);
 
   if (userFromStorage) {
     return JSON.parse(userFromStorage);
@@ -18,7 +24,7 @@ const getUserFromStorage: () => User = () => {
 };
 
 const getCartFromStorage: () => Cart = () => {
-  const cartFromStorage = localStorage.getItem(USERCART);
+  const cartFromStorage = sessionStorage.getItem(USERCART);
 
   if (cartFromStorage) {
     return JSON.parse(cartFromStorage);
@@ -58,16 +64,48 @@ const slice = createSlice({
       };
       state.loading = false;
 
-      localStorage.setItem(USER, JSON.stringify(action.payload));
+      sessionStorage.setItem(USER, JSON.stringify(action.payload));
     },
     userError(state, action: PayloadAction<UserErrorType>) {
       state.error.push(action.payload);
       state.loading = false;
     },
+    incrementCartItem(state, action: PayloadAction<ItemAndQuantity>) {
+      const item = state.cart.products.find(
+        p => p.productId === action.payload.productId,
+      );
+
+      if (item) {
+        const price = item.sum / item.quantity;
+        item.quantity += action.payload.quantity;
+        item.sum = Math.round(price * item.quantity * 100) / 100;
+
+        sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
+      }
+    },
+    decrementCartItem(state, action: PayloadAction<ItemAndQuantity>) {
+      const item = state.cart.products.find(
+        p => p.productId === action.payload.productId,
+      );
+
+      if (item) {
+        if (action.payload.quantity >= item.quantity) {
+          state.cart.products = state.cart.products.filter(
+            p => p.productId !== item.productId,
+          );
+        } else {
+          const price = item.sum / item.quantity;
+          item.quantity -= action.payload.quantity;
+          item.sum = Math.round(price * item.quantity * 100) / 100;
+        }
+
+        sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
+      }
+    },
     setCart(state, action: PayloadAction<Cart>) {
       state.cart = action.payload;
 
-      localStorage.setItem(USERCART, JSON.stringify(action.payload));
+      sessionStorage.setItem(USERCART, JSON.stringify(action.payload));
     },
   },
 });

@@ -10,6 +10,11 @@ export interface CartItem {
   sum: number;
 }
 
+export interface ItemAndQuantity {
+  productId: number;
+  quantity: number;
+}
+
 export interface Cart {
   products: CartItem[];
 }
