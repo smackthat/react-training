@@ -47,11 +47,8 @@ export function HomePage() {
 }
 
 const StyledPaper = styled(Paper)`
-  margin-top: 18em;
   margin-left: 15%;
   width: 60vw;
-  height: 70vh;
-  max-height: 50vh;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

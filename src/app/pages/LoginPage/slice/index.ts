@@ -71,7 +71,7 @@ const slice = createSlice({
       state.loading = false;
     },
     incrementCartItem(state, action: PayloadAction<ItemAndQuantity>) {
-      const item = state.cart.products.find(
+      const item = state.cart.items.find(
         p => p.productId === action.payload.productId,
       );
 
@@ -84,13 +84,13 @@ const slice = createSlice({
       }
     },
     decrementCartItem(state, action: PayloadAction<ItemAndQuantity>) {
-      const item = state.cart.products.find(
+      const item = state.cart.items.find(
         p => p.productId === action.payload.productId,
       );
 
       if (item) {
         if (action.payload.quantity >= item.quantity) {
-          state.cart.products = state.cart.products.filter(
+          state.cart.items = state.cart.items.filter(
             p => p.productId !== item.productId,
           );
         } else {

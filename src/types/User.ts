@@ -16,7 +16,7 @@ export interface ItemAndQuantity {
 }
 
 export interface Cart {
-  products: CartItem[];
+  items: CartItem[];
 }
 
 export interface UserState {

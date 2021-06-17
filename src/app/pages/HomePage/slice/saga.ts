@@ -1,4 +1,3 @@
-import { selectProducts } from './selectors';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { request } from 'utils/request';
 import { productsActions } from '.';

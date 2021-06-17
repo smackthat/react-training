@@ -1,5 +1,6 @@
 import React from 'react';
 import { ClickAwayListener, IconButton, Table } from '@material-ui/core';
+import { CurrencyFormatter } from 'utils/formatters';
 import Badge from '@material-ui/core/Badge';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AddIcon from '@material-ui/icons/Add';
@@ -23,6 +24,10 @@ export function MiniCart() {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const cart = useSelector(selectCart);
+
+  const currencyFormatter = React.useMemo(() => {
+    return CurrencyFormatter();
+  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -57,8 +62,8 @@ export function MiniCart() {
       <IconButton aria-label="cart" onClick={handleClick}>
         <StyledBadge
           badgeContent={
-            cart && cart.products.length > 0
-              ? cart.products.map(p => p.quantity).reduce((a, b) => a + b)
+            cart && cart.items.length > 0
+              ? cart.items.map(p => p.quantity).reduce((a, b) => a + b)
               : null
           }
           anchorOrigin={{
@@ -75,7 +80,7 @@ export function MiniCart() {
           <Fade {...TransitionProps} timeout={100}>
             <ClickAwayListener onClickAway={handleClickAway}>
               <CartItems>
-                {cart && cart.products.length > 0 && (
+                {cart && cart.items.length > 0 && (
                   <>
                     <Table size="small">
                       <TableHead>
@@ -87,11 +92,13 @@ export function MiniCart() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {cart.products.map(item => (
+                        {cart.items.map(item => (
                           <TableRow key={item.productId}>
                             <TableCell>{item.title}</TableCell>
                             <TableCell align="right">{item.quantity}</TableCell>
-                            <TableCell align="right">{item.sum}</TableCell>
+                            <TableCell align="right">
+                              {currencyFormatter.format(item.sum)}
+                            </TableCell>
                             <TableCell>
                               <IconButton
                                 size="small"
@@ -115,14 +122,16 @@ export function MiniCart() {
                         <TableRow className="totals">
                           <TableCell>Total</TableCell>
                           <TableCell align="right">
-                            {cart.products
+                            {cart.items
                               .map(p => p.quantity)
                               .reduce((a, b) => a + b)}
                           </TableCell>
                           <TableCell align="right">
-                            {cart.products
-                              .map(p => p.sum)
-                              .reduce((a, b) => a + b)}
+                            {currencyFormatter.format(
+                              cart.items
+                                .map(p => p.sum)
+                                .reduce((a, b) => a + b),
+                            )}
                           </TableCell>
                           <TableCell></TableCell>
                         </TableRow>
@@ -133,7 +142,9 @@ export function MiniCart() {
                     </Button>
                   </>
                 )}
-                {cart && cart.products.length === 0 && <h3>No items</h3>}
+                {cart && cart.items.length === 0 && (
+                  <h3>No items in your shopping cart.</h3>
+                )}
               </CartItems>
             </ClickAwayListener>
           </Fade>

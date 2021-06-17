@@ -72,5 +72,6 @@ const Wrapper = styled.header`
   align-items: flex-end;
   top: 0;
   padding-bottom: 1em;
+  z-index: 3;
   position: fixed;
 `;

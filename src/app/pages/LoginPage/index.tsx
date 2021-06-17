@@ -133,10 +133,9 @@ export function LoginPage() {
 }
 
 const StyledPaper = styled(Paper)`
-  margin-top: 14em;
   margin-left: 25%;
   width: 40vw;
-  height: 70vh;
+  height: 50vh;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

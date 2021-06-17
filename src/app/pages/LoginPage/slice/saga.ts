@@ -99,7 +99,7 @@ function* getUserCart() {
 
     yield put(
       userActions.setCart({
-        products: mapCartItems(cart[0].products),
+        items: mapCartItems(cart[0].products),
       }),
     );
   } catch (error) {

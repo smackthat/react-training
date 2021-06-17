@@ -2,6 +2,7 @@ import { Divider } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { ProductCategory } from 'types/Product';
 import { PageWrapper } from '../PageWrapper';
 
 export function CategoriesBar() {
@@ -10,13 +11,19 @@ export function CategoriesBar() {
       <Wrapper>
         <PageWrapper>
           <Items>
-            <Item to="/boo">Electronics</Item>
+            <Item to={`/products/${ProductCategory.ELECTRONICS}`}>
+              Electronics
+            </Item>
             <StyledDivider orientation="vertical" flexItem />
-            <Item to="/products">Jewelery</Item>
+            <Item to={`/products/${ProductCategory.JEWELERY}`}>Jewelery</Item>
             <StyledDivider orientation="vertical" flexItem />
-            <Item to="/products">Men's Clothing</Item>
+            <Item to={`/products/${ProductCategory.MENS_CLOTHING}`}>
+              Men's Clothing
+            </Item>
             <StyledDivider orientation="vertical" flexItem />
-            <Item to="/products">Women's Clothing</Item>
+            <Item to={`/products/${ProductCategory.WOMENS_CLOTHING}`}>
+              Women's Clothing
+            </Item>
           </Items>
         </PageWrapper>
       </Wrapper>
@@ -34,6 +41,7 @@ const Wrapper = styled.div`
   position: fixed;
   box-shadow: 1px 1px 4px grey;
   top: 15vh;
+  background: white;
 `;
 
 const StyledDivider = styled(Divider)`
