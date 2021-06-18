@@ -9,6 +9,7 @@ import {
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 import { userSaga } from './saga';
 import { PayloadAction } from '@reduxjs/toolkit';
+import { Product } from 'types/Product';
 
 const USER: string = 'user';
 const USERCART: string = 'usercart';
@@ -101,6 +102,18 @@ const slice = createSlice({
 
         sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
       }
+    },
+    addNewCartItem(state, action: PayloadAction<Product>) {
+      const p = action.payload;
+
+      state.cart.items.push({
+        productId: p.id,
+        title: p.title,
+        quantity: 1,
+        sum: Math.round(p.price * 1 * 100) / 100,
+      });
+
+      sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
     },
     setCart(state, action: PayloadAction<Cart>) {
       state.cart = action.payload;

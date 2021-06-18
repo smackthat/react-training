@@ -18,7 +18,6 @@ export function Searchbar() {
 
   const handleSearch = () => {
     if (searchTerm && searchTerm.length > 0) {
-      console.log('fooo!! ', searchTerm);
       history.push(`/products/search/${searchTerm}`);
     }
   };
@@ -31,7 +30,9 @@ export function Searchbar() {
     if (typeof value === 'string') {
       setSearchTerm(value);
     } else {
-      setSearchTerm(value ? value.title : null);
+      if (value) {
+        history.push(`/product/${value.id}`);
+      }
     }
   };
 

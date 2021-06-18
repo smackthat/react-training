@@ -16,6 +16,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import { Container } from '@material-ui/core';
 
 export function MiniCart() {
   const slice = useUserSlice();
@@ -82,61 +83,66 @@ export function MiniCart() {
               <CartItems>
                 {cart && cart.items.length > 0 && (
                   <>
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Title</TableCell>
-                          <TableCell align="right">Qty</TableCell>
-                          <TableCell align="right">Sum</TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {cart.items.map(item => (
-                          <TableRow key={item.productId}>
-                            <TableCell>{item.title}</TableCell>
-                            <TableCell align="right">{item.quantity}</TableCell>
-                            <TableCell align="right">
-                              {currencyFormatter.format(item.sum)}
-                            </TableCell>
-                            <TableCell>
-                              <IconButton
-                                size="small"
-                                onClick={() =>
-                                  handleProductIncrement(item.productId)
-                                }
-                              >
-                                <AddIcon />
-                              </IconButton>
-                              <IconButton
-                                size="small"
-                                onClick={() =>
-                                  handleProductDecrement(item.productId)
-                                }
-                              >
-                                <RemoveIcon />
-                              </IconButton>
-                            </TableCell>
+                    <Container>
+                      <Table size="small" stickyHeader>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Title</TableCell>
+                            <TableCell align="right">Qty</TableCell>
+                            <TableCell align="right">Sum</TableCell>
+                            <TableCell></TableCell>
                           </TableRow>
-                        ))}
-                        <TableRow className="totals">
-                          <TableCell>Total</TableCell>
-                          <TableCell align="right">
-                            {cart.items
-                              .map(p => p.quantity)
-                              .reduce((a, b) => a + b)}
-                          </TableCell>
-                          <TableCell align="right">
-                            {currencyFormatter.format(
-                              cart.items
-                                .map(p => p.sum)
-                                .reduce((a, b) => a + b),
-                            )}
-                          </TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                        </TableHead>
+                        <TableBody>
+                          {cart.items.map(item => (
+                            <TableRow key={item.productId}>
+                              <TableCell>{item.title}</TableCell>
+                              <TableCell align="right">
+                                {item.quantity}
+                              </TableCell>
+                              <TableCell align="right">
+                                {currencyFormatter.format(item.sum)}
+                              </TableCell>
+                              <TableCell>
+                                <IconButton
+                                  size="small"
+                                  onClick={() =>
+                                    handleProductIncrement(item.productId)
+                                  }
+                                >
+                                  <AddIcon />
+                                </IconButton>
+                                <IconButton
+                                  size="small"
+                                  onClick={() =>
+                                    handleProductDecrement(item.productId)
+                                  }
+                                >
+                                  <RemoveIcon />
+                                </IconButton>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                          <TableRow className="totals">
+                            <TableCell>Total</TableCell>
+                            <TableCell align="right">
+                              {cart.items
+                                .map(p => p.quantity)
+                                .reduce((a, b) => a + b)}
+                            </TableCell>
+                            <TableCell align="right">
+                              {currencyFormatter.format(
+                                cart.items
+                                  .map(p => p.sum)
+                                  .reduce((a, b) => a + b),
+                              )}
+                            </TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </Container>
+
                     <Button variant="outlined" color="primary">
                       Go to checkout
                     </Button>
@@ -164,13 +170,14 @@ const StyledBadge = styled(Badge)`
 
 const StyledPopper = styled(Popper)`
   z-index: 3;
-  padding: 1em;
+  padding: 0.5em;
   background: white;
   border: 1px solid grey;
 `;
 
 const CartItems = styled.div`
-  width: 30vw;
+  width: 35vw;
+  max-height: 50vh;
   overflow: auto;
   display: flex;
   flex-direction: column;

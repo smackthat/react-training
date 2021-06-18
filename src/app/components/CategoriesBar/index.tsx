@@ -42,6 +42,7 @@ const Wrapper = styled.div`
   box-shadow: 1px 1px 4px grey;
   top: 15vh;
   background: white;
+  z-index: 3;
 `;
 
 const StyledDivider = styled(Divider)`

@@ -5,12 +5,13 @@ import Paper from '@material-ui/core/Paper';
 import { PageWrapper } from 'app/components/PageWrapper';
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { CurrencyFormatter } from 'utils/formatters';
 import { selectProducts } from '../HomePage/slice/selectors';
-import { selectUser } from '../LoginPage/slice/selectors';
+import { useUserSlice } from '../LoginPage/slice';
+import { selectCart, selectUser } from '../LoginPage/slice/selectors';
 import { Wrapper } from '../Wrapper';
 
 interface Params {
@@ -19,10 +20,27 @@ interface Params {
 
 export function ProductPage() {
   const { id } = useParams<Params>();
+  const actions = useUserSlice().actions;
+
+  const dispatch = useDispatch();
 
   const currencyFormatter = React.useMemo(() => CurrencyFormatter(), []);
   const product = useSelector(selectProducts).find(p => p.id === Number(id));
   const user = useSelector(selectUser);
+  const cart = useSelector(selectCart);
+
+  const handleAddItem = () => {
+    if (cart && cart.items.some(i => i.productId === product.id)) {
+      dispatch(
+        actions.incrementCartItem({
+          productId: product.id,
+          quantity: 1,
+        }),
+      );
+    } else {
+      dispatch(actions.addNewCartItem(product));
+    }
+  };
 
   return (
     <>
@@ -47,7 +65,11 @@ export function ProductPage() {
                     {currencyFormatter.format(product.price)}
                   </Typography>
                   {user && (
-                    <Button variant="contained" color="primary">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleAddItem}
+                    >
                       Add to cart!
                     </Button>
                   )}
