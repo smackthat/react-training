@@ -69,7 +69,7 @@ export function ProductsPage() {
                 <Grid item xs={12}>
                   <Grid container justify="flex-start" spacing={4}>
                     {products.map(p => (
-                      <Grid key={p.id} item xs={12} md={3} spacing={1}>
+                      <Grid key={p.id} item xs={12} md={3}>
                         <StyledLink to={`/product/${p.id}`}>
                           <StyledProductPaper>
                             <StyledImg src={p.image} />
