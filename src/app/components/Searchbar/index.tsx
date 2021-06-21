@@ -37,12 +37,20 @@ export function Searchbar() {
   const onAutoCompleteChange = (e, value: Product | string) => {
     if (typeof value === 'string') {
       setSearchTerm(value);
+      handleSearch();
     } else {
       if (value) {
         setSearchTerm(value.title);
         history.push(`/product/${value.id}`);
       }
     }
+  };
+
+  const getOpt = (opt: Product | string) => {
+    if (typeof opt === 'string') {
+      return opt;
+    }
+    return opt.title;
   };
 
   return (
@@ -56,7 +64,7 @@ export function Searchbar() {
         onClose={() => setOpen(false)}
         onChange={(e, value) => onAutoCompleteChange(e, value)}
         groupBy={option => option.category.valueOf().toUpperCase()}
-        getOptionLabel={option => option.title}
+        getOptionLabel={option => getOpt(option)}
         renderInput={params => <TextField {...params} label="Search..." />}
       ></Autocomplete>
       <StyledIconButton
@@ -74,7 +82,7 @@ const StyledPaper = styled(Paper)`
   padding-left: 1em;
   display: flex;
   margin-right: 1em;
-  width: 25vw;
+  width: 22vw;
   align-items: center;
 
   @media (max-width: 1100px) {
