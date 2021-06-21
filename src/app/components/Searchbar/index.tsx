@@ -15,15 +15,23 @@ export function Searchbar() {
   const products = useSelector(selectProducts);
 
   const [searchTerm, setSearchTerm] = React.useState<string>(null);
+  const [open, setOpen] = React.useState<boolean>(false);
 
   const handleSearch = () => {
     if (searchTerm && searchTerm.length > 0) {
-      history.push(`/products/search/${searchTerm}`);
+      const term = searchTerm;
+      history.push(`/products/search/${term}`);
     }
   };
 
-  const onTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+  const handleInputChange = (event, value) => {
+    if (value && value.length > 0) {
+      setOpen(true);
+      setSearchTerm(value);
+    } else {
+      setOpen(false);
+      setSearchTerm(null);
+    }
   };
 
   const onAutoCompleteChange = (e, value: Product | string) => {
@@ -31,6 +39,7 @@ export function Searchbar() {
       setSearchTerm(value);
     } else {
       if (value) {
+        setSearchTerm(value.title);
         history.push(`/product/${value.id}`);
       }
     }
@@ -41,13 +50,14 @@ export function Searchbar() {
       <Autocomplete
         freeSolo
         fullWidth
+        open={open}
         options={products}
+        onInputChange={handleInputChange}
+        onClose={() => setOpen(false)}
         onChange={(e, value) => onAutoCompleteChange(e, value)}
         groupBy={option => option.category.valueOf().toUpperCase()}
         getOptionLabel={option => option.title}
-        renderInput={params => (
-          <TextField onChange={onTextChange} {...params} label="Search..." />
-        )}
+        renderInput={params => <TextField {...params} label="Search..." />}
       ></Autocomplete>
       <StyledIconButton
         type="submit"
@@ -63,9 +73,13 @@ export function Searchbar() {
 const StyledPaper = styled(Paper)`
   padding-left: 1em;
   display: flex;
-  margin-right: 2em;
-  width: 20vw;
+  margin-right: 1em;
+  width: 25vw;
   align-items: center;
+
+  @media (max-width: 1100px) {
+    width: 40vw;
+  }
 `;
 
 const StyledIconButton = styled(IconButton)`
