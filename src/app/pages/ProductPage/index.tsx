@@ -3,10 +3,12 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { PageWrapper } from 'app/components/PageWrapper';
+import { translations } from 'locales/translations';
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 import { CurrencyFormatter } from 'utils/formatters';
 import { selectProducts } from '../HomePage/slice/selectors';
@@ -21,6 +23,8 @@ interface Params {
 export function ProductPage() {
   const { id } = useParams<Params>();
   const actions = useUserSlice().actions;
+
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -56,7 +60,7 @@ export function ProductPage() {
               <Grid item xs={4}>
                 <StyledImg src={product.image} alt={product.title} />
               </Grid>
-              <Grid item xs={7}>
+              <Grid item xs={8} md={6}>
                 <ProductDetailsDiv>
                   <Typography variant="h6" gutterBottom>
                     {product.title}
@@ -66,18 +70,19 @@ export function ProductPage() {
                   </Typography>
                   {user && (
                     <Button
+                      id="addToCartButton"
                       variant="contained"
                       color="primary"
                       onClick={handleAddItem}
                     >
-                      Add to cart!
+                      {t(translations.product.actions.addToCart)}
                     </Button>
                   )}
                 </ProductDetailsDiv>
               </Grid>
               <Grid item xs={8}>
                 <Typography variant="subtitle2" gutterBottom>
-                  Description
+                  {t(translations.product.description)}
                 </Typography>
                 <Typography variant="subtitle2">
                   {product.description}
@@ -98,6 +103,11 @@ const ProductDetailsDiv = styled.div`
 const StyledImg = styled.img`
   max-height: 240px;
   max-width: 300px;
+
+  @media (max-width: 800px) {
+    max-height: 160px;
+    max-width: 130px;
+  }
 `;
 
 const StyledPaper = styled(Paper)`

@@ -17,11 +17,14 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import { Container } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export function MiniCart() {
   const slice = useUserSlice();
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const cart = useSelector(selectCart);
@@ -34,8 +37,14 @@ export function MiniCart() {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const handleClickAway = () => {
-    setAnchorEl(null);
+  const handleClickAway = event => {
+    if (
+      event.target.id !== 'addToCartButton' &&
+      event.target.innerText !==
+        t(translations.product.actions.addToCart).toUpperCase()
+    ) {
+      setAnchorEl(null);
+    }
   };
 
   const handleProductIncrement = (id: number) => {
@@ -87,9 +96,15 @@ export function MiniCart() {
                       <Table size="small" stickyHeader>
                         <TableHead>
                           <TableRow>
-                            <TableCell>Title</TableCell>
-                            <TableCell align="right">Qty</TableCell>
-                            <TableCell align="right">Sum</TableCell>
+                            <TableCell>
+                              {t(translations.minicart.title)}
+                            </TableCell>
+                            <TableCell align="right">
+                              {t(translations.minicart.quantity)}
+                            </TableCell>
+                            <TableCell align="right">
+                              {t(translations.minicart.sum)}
+                            </TableCell>
                             <TableCell></TableCell>
                           </TableRow>
                         </TableHead>
@@ -124,7 +139,9 @@ export function MiniCart() {
                             </TableRow>
                           ))}
                           <TableRow className="totals">
-                            <TableCell>Total</TableCell>
+                            <TableCell>
+                              {t(translations.minicart.total)}
+                            </TableCell>
                             <TableCell align="right">
                               {cart.items
                                 .map(p => p.quantity)
@@ -144,12 +161,12 @@ export function MiniCart() {
                     </StyledContainer>
 
                     <Button variant="outlined" color="primary">
-                      Go to checkout
+                      {t(translations.minicart.actions.toCheckout)}
                     </Button>
                   </>
                 )}
                 {cart && cart.items.length === 0 && (
-                  <h3>No items in your shopping cart.</h3>
+                  <h3>{t(translations.minicart.noItems)}</h3>
                 )}
               </CartItems>
             </ClickAwayListener>

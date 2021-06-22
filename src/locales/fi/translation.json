@@ -1,0 +1,41 @@
+{
+  "title": "Tervetuloa",
+  "categories": {
+    "electronics": "Elektroniikka",
+    "jewelery": "Korut",
+    "mensclothing": "Miestenvaatteet",
+    "womensclothing": "Naistenvaatteet"
+  },
+  "product": {
+    "featuredProduct": "Päivän tuote!",
+    "actions": {
+      "addToCart": "Lisää ostoskoriin!"
+    },
+    "description": "Kuvaus"
+  },
+  "minicart": {
+    "title": "Tuote",
+    "quantity": "Määrä",
+    "sum": "Summa",
+    "total": "Yht.",
+    "actions": {
+      "toCheckout": "Kassalle"
+    },
+    "noItems": "Ei tuotteita ostoskorissa."
+  },
+  "header": {
+    "actions": {
+      "logout": "Kirjaudu ulos",
+      "login": "Kirjaudu sisään",
+      "search": "Hae..."
+    }
+  },
+  "login": {
+    "title": "Ole hyvä ja kirjaudu sisään",
+    "username": "Käyttäjänimi",
+    "password": "Salasana",
+    "actions": {
+      "login": "Kirjaudu sisään!"
+    }
+  }
+}

@@ -10,10 +10,14 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLoading, selectProducts } from './slice/selectors';
 import { LoadingIndicator } from 'app/components/LoadingIndicator';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export function HomePage() {
   const productsSlice = useProductsSlice();
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const loading = useSelector(selectLoading);
   const products = useSelector(selectProducts);
@@ -36,6 +40,7 @@ export function HomePage() {
       <PageWrapper>
         <Wrapper>
           <StyledPaper>
+            <h3>{t(translations.title)}</h3>
             {loading && <LoadingIndicator />}
 
             {!loading && <FeaturedProduct />}

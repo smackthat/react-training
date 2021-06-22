@@ -5,12 +5,13 @@ import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProductCategory } from 'types/Product';
+import { ProductCategory, ProductCategoryToString } from 'types/Product';
 import { selectProducts } from '../HomePage/slice/selectors';
 import { Wrapper } from '../Wrapper';
 import { CurrencyFormatter } from 'utils/formatters';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { useTranslation } from 'react-i18next';
 
 interface Params {
   category?: ProductCategory;
@@ -19,6 +20,8 @@ interface Params {
 
 export function ProductsPage() {
   const { category, search } = useParams<Params>();
+
+  const { t } = useTranslation();
 
   const currencyFormatter = React.useMemo(() => CurrencyFormatter(), []);
 
@@ -33,18 +36,7 @@ export function ProductsPage() {
 
   const getTitle = () => {
     if (category) {
-      switch (category) {
-        case ProductCategory.ELECTRONICS:
-          return 'Electronics';
-        case ProductCategory.JEWELERY:
-          return 'Jewelery';
-        case ProductCategory.MENS_CLOTHING:
-          return `Men's clothing`;
-        case ProductCategory.WOMENS_CLOTHING:
-          return `Women's clothing`;
-        default:
-          return '';
-      }
+      return ProductCategoryToString(category, t);
     } else if (search) {
       return `Search results for '${search}'`;
     }

@@ -7,12 +7,16 @@ import styled from 'styled-components';
 import { selectProducts } from 'app/pages/HomePage/slice/selectors';
 import { useSelector } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
-import { Product } from 'types/Product';
+import { Product, ProductCategoryToString } from 'types/Product';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export function Searchbar() {
   const history = useHistory();
   const products = useSelector(selectProducts);
+
+  const { t } = useTranslation();
 
   const [searchTerm, setSearchTerm] = React.useState<string>(null);
   const [open, setOpen] = React.useState<boolean>(false);
@@ -63,9 +67,16 @@ export function Searchbar() {
         onInputChange={handleInputChange}
         onClose={() => setOpen(false)}
         onChange={(e, value) => onAutoCompleteChange(e, value)}
-        groupBy={option => option.category.valueOf().toUpperCase()}
+        groupBy={option =>
+          ProductCategoryToString(option.category, t).toUpperCase()
+        }
         getOptionLabel={option => getOpt(option)}
-        renderInput={params => <TextField {...params} label="Search..." />}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label={t(translations.header.actions.search)}
+          />
+        )}
       ></Autocomplete>
       <StyledIconButton
         type="submit"
@@ -81,6 +92,7 @@ export function Searchbar() {
 const StyledPaper = styled(Paper)`
   padding-left: 1em;
   display: flex;
+  min-height: 59px;
   margin-right: 1em;
   width: 22vw;
   align-items: center;

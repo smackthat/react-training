@@ -1,6 +1,8 @@
 import Typography from '@material-ui/core/Typography';
 import { selectProducts } from 'app/pages/HomePage/slice/selectors';
+import { translations } from 'locales/translations';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,6 +10,8 @@ import { CurrencyFormatter } from 'utils/formatters';
 
 export function FeaturedProduct() {
   const products = useSelector(selectProducts);
+
+  const { t } = useTranslation();
 
   const currencyFormatter = React.useMemo(() => CurrencyFormatter(), []);
 
@@ -26,7 +30,7 @@ export function FeaturedProduct() {
 
   return (
     <>
-      <h2>The product of today!</h2>
+      <h2>{t(translations.product.featuredProduct)}</h2>
       <StyledLink to={`/product/${productOfTheDay.id}`}>
         <StyledDiv>
           <StyledImg src={productOfTheDay.image} />

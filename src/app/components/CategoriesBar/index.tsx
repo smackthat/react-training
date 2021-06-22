@@ -1,28 +1,34 @@
 import { Divider } from '@material-ui/core';
+import { translations } from 'locales/translations';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ProductCategory } from 'types/Product';
 import { PageWrapper } from '../PageWrapper';
 
 export function CategoriesBar() {
+  const { t } = useTranslation();
+
   return (
     <>
       <Wrapper>
         <PageWrapper>
           <Items>
             <Item to={`/products/${ProductCategory.ELECTRONICS}`}>
-              Electronics
+              {t(translations.categories.electronics)}
             </Item>
             <StyledDivider orientation="vertical" flexItem />
-            <Item to={`/products/${ProductCategory.JEWELERY}`}>Jewelery</Item>
+            <Item to={`/products/${ProductCategory.JEWELERY}`}>
+              {t(translations.categories.jewelery)}
+            </Item>
             <StyledDivider orientation="vertical" flexItem />
             <Item to={`/products/${ProductCategory.MENS_CLOTHING}`}>
-              Men's Clothing
+              {t(translations.categories.mensclothing)}
             </Item>
             <StyledDivider orientation="vertical" flexItem />
             <Item to={`/products/${ProductCategory.WOMENS_CLOTHING}`}>
-              Women's Clothing
+              {t(translations.categories.womensclothing)}
             </Item>
           </Items>
         </PageWrapper>
@@ -56,6 +62,15 @@ const Item = styled(Link)`
 
   ${StyledDivider} + & {
     margin-left: 2em;
+
+    @media (max-width: 660px) {
+      margin-left: 1em;
+    }
+  }
+
+  @media (max-width: 660px) {
+    font-size: smaller;
+    margin-right: 1em;
   }
 `;
 

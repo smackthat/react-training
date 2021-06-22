@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Searchbar } from 'app/components/Searchbar';
 import { HomeButton } from 'app/components/HomeButton';
+import { LanguageButton } from 'app/components/LanguageButton';
 import { MiniCart } from 'app/components/MiniCart';
 import { PageWrapper } from '../PageWrapper';
 import { Link } from 'react-router-dom';
@@ -9,9 +10,13 @@ import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { useUserSlice } from 'app/pages/LoginPage/slice';
 import { User } from 'types/User';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export function Navbar() {
   useUserSlice();
+
+  const { t } = useTranslation();
 
   const loggedUser: User = useSelector(selectUser);
 
@@ -26,10 +31,17 @@ export function Navbar() {
             {loggedUser && (
               <>
                 <MiniCart />
-                <StyledLink to="/logout">Logout</StyledLink>
+                <StyledLink to="/logout">
+                  {t(translations.header.actions.logout)}
+                </StyledLink>
               </>
             )}
-            {!loggedUser && <StyledLink to="/login">Login</StyledLink>}
+            {!loggedUser && (
+              <StyledLink to="/login">
+                {t(translations.header.actions.login)}
+              </StyledLink>
+            )}
+            <LanguageButton />
           </FloatRight>
         </PageWrapper>
       </Wrapper>

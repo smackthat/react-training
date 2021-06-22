@@ -1,3 +1,41 @@
 {
-  "title": "welcome"
+  "title": "Welcome",
+  "categories": {
+    "electronics": "Electronics",
+    "jewelery": "Jewelery",
+    "mensclothing": "Men's clothing",
+    "womensclothing": "Women's clothing"
+  },
+  "product": {
+    "featuredProduct": "The product of today!",
+    "actions": {
+      "addToCart": "Add to cart!"
+    },
+    "description": "Description"
+  },
+  "minicart": {
+    "title": "Title",
+    "quantity": "Qty",
+    "sum": "Sum",
+    "total": "Total",
+    "actions": {
+      "toCheckout": "Go to checkout"
+    },
+    "noItems": "No items in your shopping cart."
+  },
+  "header": {
+    "actions": {
+      "logout": "Log out",
+      "login": "Log in",
+      "search": "Search..."
+    }
+  },
+  "login": {
+    "title": "Log in please",
+    "username": "User name",
+    "password": "Password",
+    "actions": {
+      "login": "Log in!"
+    }
+  }
 }

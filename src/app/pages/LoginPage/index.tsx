@@ -13,11 +13,15 @@ import { selectError, selectLoading, selectUser } from './slice/selectors';
 import { loginUser } from './slice/actions';
 import { Redirect } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export function LoginPage() {
   useUserSlice();
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const loggedUser = useSelector(selectUser);
   const isLoading = useSelector(selectLoading);
@@ -103,10 +107,10 @@ export function LoginPage() {
             )}
             {!isLoading && (
               <>
-                <h3>Login please</h3>
+                <h3>{t(translations.login.title)}</h3>
 
                 <TextField
-                  label="User name"
+                  label={t(translations.login.username)}
                   value={userName}
                   error={hasUserNameError()}
                   helperText={getUserNameErrorText()}
@@ -114,7 +118,7 @@ export function LoginPage() {
                 ></TextField>
 
                 <TextField
-                  label="Password"
+                  label={t(translations.login.password)}
                   type="password"
                   value={password}
                   error={hasPasswordError()}
@@ -122,7 +126,9 @@ export function LoginPage() {
                   onChange={onPasswordChange}
                 ></TextField>
 
-                <Button onClick={handleLoginClick}>Login!</Button>
+                <Button onClick={handleLoginClick}>
+                  {t(translations.login.actions.login)}
+                </Button>
               </>
             )}
           </StyledPaper>
