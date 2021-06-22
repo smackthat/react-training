@@ -37,5 +37,15 @@
     "actions": {
       "login": "Log in!"
     }
+  },
+  "products": {
+    "sorting": {
+      "title": "Sort by",
+      "alphabetical": "Alphabetically",
+      "expensive": "Most expensive",
+      "cheap": "Cheapest",
+      "none": "None"
+    },
+    "noResults": "No results"
   }
 }

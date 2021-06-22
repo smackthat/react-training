@@ -37,5 +37,15 @@
     "actions": {
       "login": "Kirjaudu sisään!"
     }
+  },
+  "products": {
+    "sorting": {
+      "title": "Lajittele",
+      "alphabetical": "Aakkosjärjestys",
+      "expensive": "Kallein ensin",
+      "cheap": "Halvin ensin",
+      "none": "Ei lajittelua"
+    },
+    "noResults": "Ei hakutuloksia."
   }
 }
