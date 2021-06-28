@@ -1,0 +1,51 @@
+{
+  "categories": {
+    "electronics": "",
+    "jewelery": "",
+    "mensclothing": "",
+    "womensclothing": ""
+  },
+  "product": {
+    "featuredProduct": "",
+    "actions": {
+      "addToCart": ""
+    },
+    "description": ""
+  },
+  "minicart": {
+    "title": "",
+    "quantity": "",
+    "sum": "",
+    "total": "",
+    "actions": {
+      "toCheckout": ""
+    },
+    "noItems": ""
+  },
+  "header": {
+    "actions": {
+      "logout": "",
+      "login": "",
+      "search": ""
+    }
+  },
+  "login": {
+    "title": "",
+    "username": "",
+    "password": "",
+    "actions": {
+      "login": ""
+    }
+  },
+  "products": {
+    "sorting": {
+      "title": "",
+      "alphabetical": "",
+      "expensive": "",
+      "cheap": "",
+      "none": ""
+    },
+    "noResults": "",
+    "searchResultsFor": ""
+  }
+}

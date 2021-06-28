@@ -19,6 +19,19 @@ import TableCell from '@material-ui/core/TableCell';
 import { Container } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import { CartItem } from 'types/User';
+
+enum SortByColumn {
+  TITLE,
+  QUANTITY,
+  SUM,
+}
+
+interface Sorting {
+  column: SortByColumn;
+  order: 'asc' | 'desc';
+}
 
 export function MiniCart() {
   const slice = useUserSlice();
@@ -27,7 +40,36 @@ export function MiniCart() {
   const { t } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [sortBy, setSortBy] = React.useState<Sorting>(null);
   const cart = useSelector(selectCart);
+
+  let items: CartItem[] = [];
+
+  if (cart && cart.items) {
+    items = cart.items.slice();
+  }
+
+  if (items && sortBy) {
+    switch (sortBy.column) {
+      case SortByColumn.QUANTITY:
+        sortBy.order === 'asc'
+          ? items.sort((a, b) => a.quantity - b.quantity)
+          : items.sort((a, b) => b.quantity - a.quantity);
+        break;
+      case SortByColumn.SUM:
+        sortBy.order === 'asc'
+          ? items.sort((a, b) => a.sum - b.sum)
+          : items.sort((a, b) => b.sum - a.sum);
+        break;
+      case SortByColumn.TITLE:
+        sortBy.order === 'asc'
+          ? items.sort((a, b) => a.title.localeCompare(b.title))
+          : items.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      default:
+        break;
+    }
+  }
 
   const currencyFormatter = React.useMemo(() => {
     return CurrencyFormatter();
@@ -65,6 +107,13 @@ export function MiniCart() {
     );
   };
 
+  const handleSorting = (newSortBy: SortByColumn) => {
+    setSortBy({
+      column: newSortBy,
+      order: sortBy ? (sortBy.order === 'asc' ? 'desc' : 'asc') : 'asc',
+    });
+  };
+
   const open = Boolean(anchorEl);
 
   return (
@@ -90,26 +139,68 @@ export function MiniCart() {
           <Fade {...TransitionProps} timeout={100}>
             <ClickAwayListener onClickAway={handleClickAway}>
               <CartItems>
-                {cart && cart.items.length > 0 && (
+                {items && items.length > 0 && (
                   <>
                     <StyledContainer>
                       <Table size="small" stickyHeader>
                         <TableHead>
                           <TableRow>
                             <TableCell>
-                              {t(translations.minicart.title)}
+                              <TableSortLabel
+                                active={
+                                  sortBy && sortBy.column === SortByColumn.TITLE
+                                }
+                                direction={
+                                  sortBy && sortBy.column === SortByColumn.TITLE
+                                    ? sortBy.order
+                                    : 'asc'
+                                }
+                                onClick={() =>
+                                  handleSorting(SortByColumn.TITLE)
+                                }
+                              >
+                                {t(translations.minicart.title)}
+                              </TableSortLabel>
                             </TableCell>
                             <TableCell align="right">
-                              {t(translations.minicart.quantity)}
+                              <TableSortLabel
+                                active={
+                                  sortBy &&
+                                  sortBy.column === SortByColumn.QUANTITY
+                                }
+                                direction={
+                                  sortBy &&
+                                  sortBy.column === SortByColumn.QUANTITY
+                                    ? sortBy.order
+                                    : 'asc'
+                                }
+                                onClick={() =>
+                                  handleSorting(SortByColumn.QUANTITY)
+                                }
+                              >
+                                {t(translations.minicart.quantity)}
+                              </TableSortLabel>
                             </TableCell>
                             <TableCell align="right">
-                              {t(translations.minicart.sum)}
+                              <TableSortLabel
+                                active={
+                                  sortBy && sortBy.column === SortByColumn.SUM
+                                }
+                                direction={
+                                  sortBy && sortBy.column === SortByColumn.SUM
+                                    ? sortBy.order
+                                    : 'asc'
+                                }
+                                onClick={() => handleSorting(SortByColumn.SUM)}
+                              >
+                                {t(translations.minicart.sum)}
+                              </TableSortLabel>
                             </TableCell>
                             <TableCell></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {cart.items.map(item => (
+                          {items.map(item => (
                             <TableRow key={item.productId}>
                               <TableCell>{item.title}</TableCell>
                               <TableCell align="right">
@@ -165,8 +256,8 @@ export function MiniCart() {
                     </Button>
                   </>
                 )}
-                {cart && cart.items.length === 0 && (
-                  <h3>{t(translations.minicart.noItems)}</h3>
+                {items.length === 0 && (
+                  <h4>{t(translations.minicart.noItems)}</h4>
                 )}
               </CartItems>
             </ClickAwayListener>

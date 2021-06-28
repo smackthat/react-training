@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import { translations } from 'locales/translations';
 
 interface Params {
   category?: ProductCategory;
@@ -67,7 +68,7 @@ export function ProductsPage() {
     if (category) {
       return ProductCategoryToString(category, t);
     } else if (search) {
-      return `Search results for '${search}'`;
+      return t(translations.products.searchResultsFor).replace('$', search);
     }
 
     return '';
@@ -92,29 +93,31 @@ export function ProductsPage() {
                   {getTitle()}
                 </Typography>
 
-                <SortBy>
-                  <InputLabel id="sortLabel">
-                    {t('products.sorting.title')}
-                  </InputLabel>
-                  <Select
-                    labelId="sortLabel"
-                    value={sortBy}
-                    onChange={handleSortChange}
-                  >
-                    <MenuItem value={SortByEnum.Default}>
-                      {t('products.sorting.none')}
-                    </MenuItem>
-                    <MenuItem value={SortByEnum.Alphabetical}>
-                      {t('products.sorting.alphabetical')}
-                    </MenuItem>
-                    <MenuItem value={SortByEnum.Expensive}>
-                      {t('products.sorting.expensive')}
-                    </MenuItem>
-                    <MenuItem value={SortByEnum.Cheap}>
-                      {t('products.sorting.cheap')}
-                    </MenuItem>
-                  </Select>
-                </SortBy>
+                {products && products.length > 0 && (
+                  <SortBy>
+                    <InputLabel id="sortLabel">
+                      {t(translations.products.sorting.title)}
+                    </InputLabel>
+                    <Select
+                      labelId="sortLabel"
+                      value={sortBy}
+                      onChange={handleSortChange}
+                    >
+                      <MenuItem value={SortByEnum.Default}>
+                        {t(translations.products.sorting.none)}
+                      </MenuItem>
+                      <MenuItem value={SortByEnum.Alphabetical}>
+                        {t(translations.products.sorting.alphabetical)}
+                      </MenuItem>
+                      <MenuItem value={SortByEnum.Expensive}>
+                        {t(translations.products.sorting.expensive)}
+                      </MenuItem>
+                      <MenuItem value={SortByEnum.Cheap}>
+                        {t(translations.products.sorting.cheap)}
+                      </MenuItem>
+                    </Select>
+                  </SortBy>
+                )}
               </TitleDiv>
 
               <Grid container spacing={1}>
@@ -140,7 +143,7 @@ export function ProductsPage() {
               </Grid>
 
               {products.length === 0 && (
-                <Typography>{t('products.noResults')}</Typography>
+                <Typography>{t(translations.products.noResults)}</Typography>
               )}
             </StyledDiv>
           </StyledPaper>
@@ -170,6 +173,11 @@ const SortBy = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 3em;
+
+  & label,
+  div {
+    font-size: small;
+  }
 `;
 
 const StyledLink = styled(Link)`

@@ -46,6 +46,7 @@
       "cheap": "Halvin ensin",
       "none": "Ei lajittelua"
     },
-    "noResults": "Ei hakutuloksia."
+    "noResults": "Ei hakutuloksia.",
+    "searchResultsFor": "Hakutulokset haulle '$'"
   }
 }

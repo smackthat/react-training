@@ -46,6 +46,7 @@
       "cheap": "Cheapest",
       "none": "None"
     },
-    "noResults": "No results"
+    "noResults": "No results",
+    "searchResultsFor": "Search results for '$'"
   }
 }
