@@ -1,14 +1,15 @@
-import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import LanguageIcon from '@material-ui/icons/Language';
-import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import PersonIcon from '@material-ui/icons/Person';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { translations } from 'locales/translations';
 
-export function LanguageButton() {
-  const { i18n, t } = useTranslation();
+export function ProfileButton() {
+  const { t } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -20,14 +21,10 @@ export function LanguageButton() {
     setAnchorEl(null);
   };
 
-  const handleLanguageClick = (language: string) => {
-    i18n.changeLanguage(language);
-  };
-
   return (
     <>
       <IconButton onClick={handleClick}>
-        <StyledIcon />
+        <StyledIcon fontSize="large" />
       </IconButton>
       <Menu
         open={Boolean(anchorEl)}
@@ -35,17 +32,23 @@ export function LanguageButton() {
         onClose={handleClose}
         keepMounted
       >
-        <MenuItem onClick={() => handleLanguageClick('en')}>
-          {t(translations.languages.english)}
-        </MenuItem>
-        <MenuItem onClick={() => handleLanguageClick('fi')}>
-          {t(translations.languages.finnish)}
-        </MenuItem>
+        <StyledLink to="/">
+          <MenuItem>{t(translations.header.actions.orderHistory)}</MenuItem>
+        </StyledLink>
+        <StyledLink to="/logout">
+          <MenuItem>{t(translations.header.actions.logout)}</MenuItem>
+        </StyledLink>
       </Menu>
     </>
   );
 }
 
-const StyledIcon = styled(LanguageIcon)`
+const StyledIcon = styled(PersonIcon)`
   color: #ffffff;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  display: block;
+  color: inherit;
 `;

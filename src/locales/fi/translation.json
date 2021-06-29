@@ -27,7 +27,8 @@
     "actions": {
       "logout": "Kirjaudu ulos",
       "login": "Kirjaudu sisään",
-      "search": "Hae..."
+      "search": "Hae...",
+      "orderHistory": "Tilaushistoria"
     }
   },
   "login": {
@@ -48,5 +49,16 @@
     },
     "noResults": "Ei hakutuloksia.",
     "searchResultsFor": "Hakutulokset haulle '$'"
+  },
+  "checkout": {
+    "steps": {
+      "delivery": "Valitse toimitustiedot",
+      "billing": "Valitse laskutustiedot",
+      "review": "Viimeistele tilaus"
+    }
+  },
+  "languages": {
+    "english": "Englanti",
+    "finnish": "Suomi"
   }
 }

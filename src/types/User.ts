@@ -19,11 +19,25 @@ export interface Cart {
   items: CartItem[];
 }
 
+export interface Address {
+  street: string;
+  city: string;
+  zipCode: number;
+}
+
+export interface Order {
+  deliveryDate: Date;
+  deliveryAddress: Address;
+  items: CartItem[];
+}
+
 export interface UserState {
   user: User;
   loading: boolean;
   error: UserErrorType[];
   cart?: Cart;
+  orderHistory?: Order[];
+  addresses?: Address[];
 }
 
 export enum UserErrorType {

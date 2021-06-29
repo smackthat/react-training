@@ -3,7 +3,7 @@ import { PageWrapper } from 'app/components/PageWrapper';
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ProductCategory, ProductCategoryToString } from 'types/Product';
 import { selectProducts } from '../HomePage/slice/selectors';
@@ -16,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { translations } from 'locales/translations';
+import { useEffect } from 'react';
 
 interface Params {
   category?: ProductCategory;
@@ -31,6 +32,7 @@ enum SortByEnum {
 
 export function ProductsPage() {
   const { category, search } = useParams<Params>();
+  const location = useLocation();
 
   const [sortBy, setSortBy] = React.useState<SortByEnum>(SortByEnum.Default);
 
@@ -77,6 +79,10 @@ export function ProductsPage() {
   const handleSortChange = e => {
     setSortBy(e.target.value);
   };
+
+  useEffect(() => {
+    setSortBy(SortByEnum.Default);
+  }, [location]);
 
   return (
     <>
@@ -189,6 +195,12 @@ const StyledProductPaper = styled(Paper)`
   height: 300px;
   text-align: center;
   padding: 2em;
+
+  & h6 {
+    @media (max-width: 1485px) {
+      font-size: small;
+    }
+  }
 `;
 
 const StyledImg = styled.img`

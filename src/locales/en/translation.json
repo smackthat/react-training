@@ -27,7 +27,8 @@
     "actions": {
       "logout": "Log out",
       "login": "Log in",
-      "search": "Search..."
+      "search": "Search...",
+      "orderHistory": "Order history"
     }
   },
   "login": {
@@ -48,5 +49,16 @@
     },
     "noResults": "No results",
     "searchResultsFor": "Search results for '$'"
+  },
+  "checkout": {
+    "steps": {
+      "delivery": "Choose delivery method",
+      "billing": "Choose billing method",
+      "review": "Review order"
+    }
+  },
+  "languages": {
+    "english": "English",
+    "finnish": "Finnish"
   }
 }

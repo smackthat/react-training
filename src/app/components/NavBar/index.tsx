@@ -12,6 +12,7 @@ import { useUserSlice } from 'app/pages/LoginPage/slice';
 import { User } from 'types/User';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { ProfileButton } from '../ProfileButton';
 
 export function Navbar() {
   useUserSlice();
@@ -31,9 +32,7 @@ export function Navbar() {
             {loggedUser && (
               <>
                 <MiniCart />
-                <StyledLink to="/logout">
-                  {t(translations.header.actions.logout)}
-                </StyledLink>
+                <ProfileButton />
               </>
             )}
             {!loggedUser && (

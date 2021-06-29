@@ -5,6 +5,7 @@ import Badge from '@material-ui/core/Badge';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import DeleteIcon from '@material-ui/icons/Delete';
 import styled from 'styled-components';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
@@ -21,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { CartItem } from 'types/User';
+import { Link } from 'react-router-dom';
 
 enum SortByColumn {
   TITLE,
@@ -40,7 +42,10 @@ export function MiniCart() {
   const { t } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [sortBy, setSortBy] = React.useState<Sorting>(null);
+  const [sortBy, setSortBy] = React.useState<Sorting>({
+    column: SortByColumn.TITLE,
+    order: 'asc',
+  });
   const cart = useSelector(selectCart);
 
   let items: CartItem[] = [];
@@ -107,11 +112,24 @@ export function MiniCart() {
     );
   };
 
+  const handleProductRemoveAll = (id: number, qty: number) => {
+    dispatch(
+      slice.actions.decrementCartItem({
+        productId: id,
+        quantity: qty,
+      }),
+    );
+  };
+
   const handleSorting = (newSortBy: SortByColumn) => {
     setSortBy({
       column: newSortBy,
       order: sortBy ? (sortBy.order === 'asc' ? 'desc' : 'asc') : 'asc',
     });
+  };
+
+  const handleCheckoutClick = () => {
+    setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
@@ -226,6 +244,18 @@ export function MiniCart() {
                                 >
                                   <RemoveIcon />
                                 </IconButton>
+                                <IconButton
+                                  id="deleteButton"
+                                  size="small"
+                                  onClick={() =>
+                                    handleProductRemoveAll(
+                                      item.productId,
+                                      item.quantity,
+                                    )
+                                  }
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
                               </TableCell>
                             </TableRow>
                           ))}
@@ -251,7 +281,13 @@ export function MiniCart() {
                       </Table>
                     </StyledContainer>
 
-                    <Button variant="outlined" color="primary">
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      component={Link}
+                      to="/checkout"
+                      onClick={handleCheckoutClick}
+                    >
                       {t(translations.minicart.actions.toCheckout)}
                     </Button>
                   </>
@@ -294,11 +330,15 @@ const CartItems = styled.div`
   flex-direction: column;
   align-items: center;
 
-  @media (max-width: 1100px) {
-    width: 80vw;
+  @media (max-width: 1600px) {
+    width: 60vw;
   }
 
-  > Button {
+  @media (max-width: 740px) {
+    width: 85vw;
+  }
+
+  > a {
     margin-top: 2em;
     align-self: flex-end;
     position: sticky;
@@ -309,6 +349,10 @@ const CartItems = styled.div`
 
     & .totals td {
       font-weight: bold;
+    }
+
+    & #deleteButton {
+      margin-left: 1em;
     }
   }
 `;

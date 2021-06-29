@@ -39,6 +39,8 @@ export const initialState: UserState = {
   loading: false,
   error: [],
   cart: getCartFromStorage(),
+  orderHistory: [],
+  addresses: [],
 };
 
 const slice = createSlice({
@@ -54,8 +56,8 @@ const slice = createSlice({
     logoutUser(state) {
       state.user = null;
 
-      localStorage.removeItem(USER);
-      localStorage.removeItem(USERCART);
+      sessionStorage.removeItem(USER);
+      sessionStorage.removeItem(USERCART);
     },
     userLoaded(state, action: PayloadAction<User>) {
       const user = action.payload;

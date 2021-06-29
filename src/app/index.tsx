@@ -8,7 +8,7 @@
 
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 
 import { GlobalStyle } from 'styles/global-styles';
 
@@ -21,9 +21,18 @@ import { CategoriesBar } from './components/CategoriesBar';
 import { LogoutPage } from './pages/LogoutPage/Loadable';
 import { ProductsPage } from './pages/ProductsPage/Loadable';
 import { ProductPage } from './pages/ProductPage/Loadable';
+import { CheckoutPage } from './pages/CheckoutPage/Loadable';
+import { useSelector } from 'react-redux';
+import { selectUser } from './pages/LoginPage/slice/selectors';
+import { useUserSlice } from './pages/LoginPage/slice';
 
 export function App() {
   const { i18n } = useTranslation();
+
+  useUserSlice();
+
+  const user = useSelector(selectUser);
+
   return (
     <BrowserRouter>
       <Helmet
@@ -40,6 +49,11 @@ export function App() {
       <Switch>
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/logout" component={LogoutPage} />
+        <Route
+          exact
+          path="/checkout"
+          render={() => (!user ? <Redirect to="/login" /> : <CheckoutPage />)}
+        />
         <Route exact path="/products/:category" component={ProductsPage} />
         <Route exact path="/products/search/:search" component={ProductsPage} />
         <Route exact path="/product/:id" component={ProductPage} />
