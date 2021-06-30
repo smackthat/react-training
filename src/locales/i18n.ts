@@ -6,6 +6,9 @@ import en from './en/translation.json';
 import fi from './fi/translation.json';
 import { convertLanguageJsonToObject } from './translations';
 
+import fiLocale from 'date-fns/locale/fi';
+import enLocale from 'date-fns/locale/en-US';
+
 export const translationsJson = {
   en: {
     translation: en,
@@ -13,6 +16,11 @@ export const translationsJson = {
   fi: {
     translation: fi,
   },
+};
+
+export const dateLocale = {
+  fi: fiLocale,
+  en: enLocale,
 };
 
 // Create the 'translations' object to provide full intellisense support for the static json files.

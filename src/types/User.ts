@@ -1,3 +1,5 @@
+import { Product } from './Product';
+
 export interface User {
   id: number;
   userName: string;
@@ -15,6 +17,11 @@ export interface ItemAndQuantity {
   quantity: number;
 }
 
+export interface ProductAndQuantity {
+  product: Product;
+  quantity: number;
+}
+
 export interface Cart {
   items: CartItem[];
 }
@@ -22,7 +29,7 @@ export interface Cart {
 export interface Address {
   street: string;
   city: string;
-  zipCode: number;
+  zipCode: string;
 }
 
 export interface Order {

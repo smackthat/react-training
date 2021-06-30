@@ -2,6 +2,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 import { PageWrapper } from 'app/components/PageWrapper';
 import { translations } from 'locales/translations';
 import * as React from 'react';
@@ -28,6 +29,8 @@ export function ProductPage() {
 
   const dispatch = useDispatch();
 
+  const [quantity, setQuantity] = React.useState<number>(1);
+
   const currencyFormatter = React.useMemo(() => CurrencyFormatter(), []);
   const product = useSelector(selectProducts).find(p => p.id === Number(id));
   const user = useSelector(selectUser);
@@ -38,11 +41,24 @@ export function ProductPage() {
       dispatch(
         actions.incrementCartItem({
           productId: product.id,
-          quantity: 1,
+          quantity: quantity,
         }),
       );
     } else {
-      dispatch(actions.addNewCartItem(product));
+      dispatch(
+        actions.addNewCartItem({
+          product: product,
+          quantity: quantity,
+        }),
+      );
+    }
+  };
+
+  const handleQuantityChange = e => {
+    if (+e.target.value < 1) {
+      setQuantity(1);
+    } else {
+      setQuantity(+e.target.value);
     }
   };
 
@@ -69,14 +85,33 @@ export function ProductPage() {
                     {currencyFormatter.format(product.price)}
                   </Typography>
                   {user && (
-                    <Button
-                      id="addToCartButton"
-                      variant="contained"
-                      color="primary"
-                      onClick={handleAddItem}
-                    >
-                      {t(translations.product.actions.addToCart)}
-                    </Button>
+                    <AddToBasketDiv>
+                      <Button
+                        id="addToCartButton"
+                        variant="contained"
+                        color="primary"
+                        onClick={handleAddItem}
+                      >
+                        {t(translations.product.actions.addToCart)}
+                      </Button>
+                      <TextField
+                        id="outlined-number"
+                        label={t('product.quantity')}
+                        type="number"
+                        value={quantity}
+                        onChange={handleQuantityChange}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        InputProps={{
+                          inputProps: {
+                            min: 1,
+                            max: 1000,
+                          },
+                        }}
+                        variant="outlined"
+                      />
+                    </AddToBasketDiv>
                   )}
                 </ProductDetailsDiv>
               </Grid>
@@ -114,4 +149,14 @@ const StyledPaper = styled(Paper)`
   margin-left: 10%;
   width: 70vw;
   padding: 3em;
+`;
+
+const AddToBasketDiv = styled.div`
+  display: flex;
+  margin-top: 2em;
+
+  & .MuiTextField-root {
+    margin-left: 1em;
+    width: 5em;
+  }
 `;

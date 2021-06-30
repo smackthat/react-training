@@ -30,13 +30,20 @@ export function ProfileButton() {
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClose}
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         keepMounted
       >
         <StyledLink to="/">
-          <MenuItem>{t(translations.header.actions.orderHistory)}</MenuItem>
+          <MenuItem onClick={handleClose}>
+            {t(translations.header.actions.orderHistory)}
+          </MenuItem>
         </StyledLink>
         <StyledLink to="/logout">
-          <MenuItem>{t(translations.header.actions.logout)}</MenuItem>
+          <MenuItem onClick={handleClose}>
+            {t(translations.header.actions.logout)}
+          </MenuItem>
         </StyledLink>
       </Menu>
     </>

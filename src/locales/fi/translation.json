@@ -11,7 +11,8 @@
     "actions": {
       "addToCart": "Lisää ostoskoriin!"
     },
-    "description": "Kuvaus"
+    "description": "Kuvaus",
+    "quantity": "Määrä"
   },
   "minicart": {
     "title": "Tuote",
@@ -55,10 +56,24 @@
       "delivery": "Valitse toimitustiedot",
       "billing": "Valitse laskutustiedot",
       "review": "Viimeistele tilaus"
+    },
+    "cartEmpty": "Ostoskori on tyhjä. Ole hyvä ja tee ostoksia ja tule sitten kassalle.",
+    "title": "Kassa",
+    "actions": {
+      "previous": "Edellinen",
+      "next": "Seuraava"
     }
   },
   "languages": {
     "english": "Englanti",
     "finnish": "Suomi"
+  },
+  "address": {
+    "address": "Katuosoite",
+    "zipCode": "Postinumero",
+    "city": "Kaupunki"
+  },
+  "order": {
+    "deliveryDate": "Toimituspvm"
   }
 }

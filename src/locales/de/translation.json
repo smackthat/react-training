@@ -10,7 +10,8 @@
     "actions": {
       "addToCart": ""
     },
-    "description": ""
+    "description": "",
+    "quantity": ""
   },
   "minicart": {
     "title": "",
@@ -54,10 +55,24 @@
       "delivery": "",
       "billing": "",
       "review": ""
+    },
+    "cartEmpty": "",
+    "title": "",
+    "actions": {
+      "previous": "",
+      "next": ""
     }
   },
   "languages": {
     "english": "",
     "finnish": ""
+  },
+  "address": {
+    "address": "",
+    "zipCode": "",
+    "city": ""
+  },
+  "order": {
+    "deliveryDate": ""
   }
 }

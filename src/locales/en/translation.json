@@ -11,7 +11,8 @@
     "actions": {
       "addToCart": "Add to cart!"
     },
-    "description": "Description"
+    "description": "Description",
+    "quantity": "Quantity"
   },
   "minicart": {
     "title": "Title",
@@ -55,10 +56,24 @@
       "delivery": "Choose delivery method",
       "billing": "Choose billing method",
       "review": "Review order"
+    },
+    "cartEmpty": "Cart is empty. Please add products first and then proceed to checkout.",
+    "title": "Checkout",
+    "actions": {
+      "previous": "Previous",
+      "next": "Next"
     }
   },
   "languages": {
     "english": "English",
     "finnish": "Finnish"
+  },
+  "address": {
+    "address": "Street address",
+    "zipCode": "ZIP code",
+    "city": "City"
+  },
+  "order": {
+    "deliveryDate": "Delivery date"
   }
 }

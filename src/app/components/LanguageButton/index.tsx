@@ -22,6 +22,7 @@ export function LanguageButton() {
 
   const handleLanguageClick = (language: string) => {
     i18n.changeLanguage(language);
+    handleClose();
   };
 
   return (
@@ -32,6 +33,9 @@ export function LanguageButton() {
       <Menu
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={handleClose}
         keepMounted
       >
