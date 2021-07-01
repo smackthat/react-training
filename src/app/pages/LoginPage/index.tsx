@@ -57,9 +57,9 @@ export function LoginPage() {
 
   const getUserNameErrorText: () => string = () => {
     return error.some(e => e === UserErrorType.USER_NAME_EMPTY)
-      ? 'Name is empty'
+      ? t('login.validation.userNameEmpty')
       : error.some(e => e === UserErrorType.USER_NOT_FOUND)
-      ? 'User not found'
+      ? t('login.validation.userNotFound')
       : '';
   };
 
@@ -73,7 +73,7 @@ export function LoginPage() {
 
   const getPasswordErrorText: () => string = () => {
     return error.some(e => e === UserErrorType.PASSWORD_EMPTY)
-      ? 'Password is empty'
+      ? t('login.validation.passwordIsEmpty')
       : '';
   };
 
@@ -92,7 +92,7 @@ export function LoginPage() {
           onClose={handleErrorSnackbarClose}
           autoHideDuration={5000}
         >
-          <span>Something went boo boo...</span>
+          <span>{t('errors.apiError')}</span>
         </Snackbar>
       )}
 

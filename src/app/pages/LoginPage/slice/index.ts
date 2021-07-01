@@ -79,9 +79,8 @@ const slice = createSlice({
       );
 
       if (item) {
-        const price = item.sum / item.quantity;
         item.quantity += action.payload.quantity;
-        item.sum = Math.round(price * item.quantity * 100) / 100;
+        item.sum = Math.round(item.unitPrice * item.quantity * 100) / 100;
 
         sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
       }
@@ -112,6 +111,7 @@ const slice = createSlice({
         productId: pq.product.id,
         title: pq.product.title,
         quantity: pq.quantity,
+        unitPrice: pq.product.price,
         sum: Math.round(pq.product.price * pq.quantity * 100) / 100,
       });
 

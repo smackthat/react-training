@@ -1,3 +1,4 @@
+import { BillingMethod } from './BillingMethod';
 import { Product } from './Product';
 
 export interface User {
@@ -9,6 +10,7 @@ export interface CartItem {
   productId: number;
   title: string;
   quantity: number;
+  unitPrice: number;
   sum: number;
 }
 
@@ -35,6 +37,8 @@ export interface Address {
 export interface Order {
   deliveryDate: Date;
   deliveryAddress: Address;
+  billingMethod: BillingMethod;
+  billingAddress?: Address;
   items: CartItem[];
 }
 

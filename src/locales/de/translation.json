@@ -11,7 +11,8 @@
       "addToCart": ""
     },
     "description": "",
-    "quantity": ""
+    "quantity": "",
+    "unitPrice": ""
   },
   "minicart": {
     "title": "",
@@ -37,6 +38,11 @@
     "password": "",
     "actions": {
       "login": ""
+    },
+    "validation": {
+      "userNameEmpty": "",
+      "userNotFound": "",
+      "passwordIsEmpty": ""
     }
   },
   "products": {
@@ -60,7 +66,21 @@
     "title": "",
     "actions": {
       "previous": "",
-      "next": ""
+      "next": "",
+      "sendOrder": ""
+    },
+    "delivery": {
+      "deliveryAddress": "",
+      "deliveryMethod": ""
+    },
+    "billing": {
+      "billingMethod": {
+        "invoice": "",
+        "credit": "",
+        "cash": ""
+      },
+      "billingAddress": "",
+      "title": ""
     }
   },
   "languages": {
@@ -74,5 +94,8 @@
   },
   "order": {
     "deliveryDate": ""
+  },
+  "errors": {
+    "apiError": ""
   }
 }

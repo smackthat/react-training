@@ -12,7 +12,8 @@
       "addToCart": "Lisää ostoskoriin!"
     },
     "description": "Kuvaus",
-    "quantity": "Määrä"
+    "quantity": "Määrä",
+    "unitPrice": "A-hinta"
   },
   "minicart": {
     "title": "Tuote",
@@ -38,6 +39,11 @@
     "password": "Salasana",
     "actions": {
       "login": "Kirjaudu sisään!"
+    },
+    "validation": {
+      "userNameEmpty": "Syötä käyttäjätunnus",
+      "userNotFound": "Käyttäjää ei löydetty",
+      "passwordIsEmpty": "Syötä salasana"
     }
   },
   "products": {
@@ -61,7 +67,21 @@
     "title": "Kassa",
     "actions": {
       "previous": "Edellinen",
-      "next": "Seuraava"
+      "next": "Seuraava",
+      "sendOrder": "Lähetä tilaus"
+    },
+    "delivery": {
+      "deliveryAddress": "Toimitusosoite",
+      "deliveryMethod": "Toimitustapa"
+    },
+    "billing": {
+      "billingMethod": {
+        "invoice": "Lasku",
+        "credit": "Luotto",
+        "cash": "Käteinen (toimituksen yhteydessä)"
+      },
+      "billingAddress": "Laskutusosoite",
+      "title": "Laskutustapa"
     }
   },
   "languages": {
@@ -75,5 +95,8 @@
   },
   "order": {
     "deliveryDate": "Toimituspvm"
+  },
+  "errors": {
+    "apiError": "Jokin meni pieleen."
   }
 }

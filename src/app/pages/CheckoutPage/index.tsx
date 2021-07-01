@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { PageWrapper } from 'app/components/PageWrapper';
 import { translations } from 'locales/translations';
@@ -28,23 +27,29 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import { AddressInput } from 'app/components/AddressInput';
+import Divider from '@material-ui/core/Divider';
+import { BillingMethod, BillingMethodToString } from 'types/BillingMethod';
+import { ItemsGrid } from 'app/components/ItemsGrid';
+import SendIcon from '@material-ui/icons/Send';
 
-enum BillingMethod {
-  Invoice,
-  Credit,
-  Cash,
-}
+const defaultAddress: Address = {
+  street: '',
+  zipCode: null,
+  city: '',
+};
 
 export function CheckoutPage() {
   const { i18n, t } = useTranslation();
 
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const [deliveryDate, setDeliveryDate] = React.useState<Date>(null);
-  const [address, setAddress] = React.useState<Address>({
-    street: '',
-    zipCode: null,
-    city: '',
-  });
+  const [deliveryAddress, setDeliveryAddress] = React.useState<Address>(
+    defaultAddress,
+  );
+  const [billingAddress, setBillingAddress] = React.useState<Address>(
+    defaultAddress,
+  );
   const [billingMethod, setBillingMethod] = React.useState<BillingMethod>(null);
 
   const cart = useSelector(selectCart);
@@ -58,6 +63,14 @@ export function CheckoutPage() {
     [t],
   );
 
+  const addressValid = React.useCallback((address: Address) => {
+    return (
+      address.city.length > 0 &&
+      address.zipCode.length > 0 &&
+      address.street.length > 0
+    );
+  }, []);
+
   const handleGoBack = () => {
     setActiveStep(activeStep - 1);
   };
@@ -70,18 +83,6 @@ export function CheckoutPage() {
     setDeliveryDate(date);
   };
 
-  const handleStreetChange = e => {
-    setAddress({ ...address, street: e.target.value });
-  };
-
-  const handleZipCodeChange = e => {
-    setAddress({ ...address, zipCode: e.target.value });
-  };
-
-  const handleCityChange = e => {
-    setAddress({ ...address, city: e.target.value });
-  };
-
   const handleBillingMethodChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -91,14 +92,15 @@ export function CheckoutPage() {
   const nextDisabled = () => {
     switch (activeStep) {
       case 0:
-        return !(
-          address.city.length > 0 &&
-          address.zipCode.length > 0 &&
-          address.street.length > 0 &&
-          !!deliveryDate
-        );
+        return !(addressValid(deliveryAddress) && !!deliveryDate);
       case 1:
-        return billingMethod === null;
+        if (billingMethod === null) {
+          return true;
+        }
+        if (billingMethod === BillingMethod.Invoice) {
+          return !addressValid(billingAddress);
+        }
+        return false;
       default:
         return false;
     }
@@ -109,35 +111,13 @@ export function CheckoutPage() {
       case 0: // Delivery info
         return (
           <>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <TextField
-                  value={address?.street}
-                  onChange={handleStreetChange}
-                  label={t('address.address')}
-                ></TextField>
-              </Grid>
-              <Grid item xs={6} md={2}>
-                <TextField
-                  value={address.zipCode ?? ''}
-                  type="number"
-                  InputProps={{
-                    inputProps: {
-                      max: 10000,
-                    },
-                  }}
-                  onChange={handleZipCodeChange}
-                  label={t('address.zipCode')}
-                ></TextField>
-              </Grid>
-              <Grid item xs={6} md={3}>
-                <TextField
-                  value={address?.city}
-                  onChange={handleCityChange}
-                  label={t('address.city')}
-                ></TextField>
-              </Grid>
-            </Grid>
+            <FormLabel component="legend">
+              {t(translations.checkout.delivery.deliveryAddress)}
+            </FormLabel>
+            <AddressInput
+              address={deliveryAddress}
+              setAddress={setDeliveryAddress}
+            ></AddressInput>
 
             <MuiPickersUtilsProvider
               utils={DateFnsUtils}
@@ -149,7 +129,7 @@ export function CheckoutPage() {
                 format="MM/dd/yyyy"
                 margin="normal"
                 id="date-picker-inline"
-                label={t('order.deliveryDate')}
+                label={t(translations.order.deliveryDate)}
                 value={deliveryDate}
                 onChange={handleDeliveryDateChange}
                 KeyboardButtonProps={{
@@ -162,49 +142,134 @@ export function CheckoutPage() {
       case 1: // Billing info
         return (
           <>
-            <FormControl component="fieldset">
-              <FormLabel component="legend">
-                {t('checkout.billing.billingMethod')}
-              </FormLabel>
-              <RadioGroup
-                aria-label="billing method"
-                name="billingmethod1"
-                value={billingMethod}
-                onChange={handleBillingMethodChange}
-              >
-                <FormControlLabel
-                  value={BillingMethod.Invoice}
-                  control={<Radio />}
-                  label={t('checkout.billing.billingMethod.invoice')}
-                />
-                <FormControlLabel
-                  value={BillingMethod.Credit}
-                  control={<Radio />}
-                  label={t('checkout.billing.billingMethod.credit')}
-                />
-                <FormControlLabel
-                  value={BillingMethod.Cash}
-                  control={<Radio />}
-                  label={t('checkout.billing.billingMethod.cash')}
-                />
-              </RadioGroup>
-            </FormControl>
+            <Grid container spacing={1}>
+              <Grid item xs={12} md={6}>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">
+                    {t('checkout.billing.title')}
+                  </FormLabel>
+                  <RadioGroup
+                    aria-label="billing method"
+                    name="billingmethod1"
+                    value={billingMethod}
+                    onChange={handleBillingMethodChange}
+                  >
+                    <FormControlLabel
+                      value={BillingMethod.Invoice}
+                      control={<Radio />}
+                      label={t(
+                        translations.checkout.billing.billingMethod.invoice,
+                      )}
+                    />
+                    <FormControlLabel
+                      value={BillingMethod.Credit}
+                      control={<Radio />}
+                      label={t(
+                        translations.checkout.billing.billingMethod.credit,
+                      )}
+                    />
+                    <FormControlLabel
+                      value={BillingMethod.Cash}
+                      control={<Radio />}
+                      label={t(
+                        translations.checkout.billing.billingMethod.cash,
+                      )}
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                {billingMethod === BillingMethod.Invoice && (
+                  <>
+                    <FormLabel component="legend">
+                      {t(translations.checkout.billing.billingAddress)}
+                    </FormLabel>
+                    <AddressInput
+                      address={billingAddress}
+                      setAddress={setBillingAddress}
+                    ></AddressInput>
+                  </>
+                )}
+              </Grid>
+            </Grid>
           </>
         );
       case 2: // Review
         return (
           <>
-            <Typography>{t('checkout.review.title')}</Typography>
             <Grid container spacing={1}>
-              <Grid item xs={6}>
-                <Card>
+              <Grid item xs={12} md={6}>
+                <StyledCard>
                   <CardContent>
-                    <Typography>Address</Typography>
+                    <FormLabel component="legend">
+                      {t(translations.checkout.delivery.deliveryMethod)}
+                    </FormLabel>
+                    <Divider />
+                    <Grid container spacing={1}>
+                      <Grid item xs={6}>
+                        <Typography variant="subtitle1">
+                          {t(translations.checkout.delivery.deliveryAddress)}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {deliveryAddress.street}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {deliveryAddress.zipCode} {deliveryAddress.city}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="subtitle1">
+                          {t(translations.order.deliveryDate)}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {deliveryDate.toLocaleDateString()}
+                        </Typography>
+                      </Grid>
+                    </Grid>
                   </CardContent>
-                </Card>
+                </StyledCard>
               </Grid>
 
-              <Grid item xs={6}></Grid>
+              <Grid item xs={12} md={6}>
+                <StyledCard>
+                  <CardContent>
+                    <FormLabel component="legend">
+                      {t('checkout.billing.title')}
+                    </FormLabel>
+                    <Divider />
+                    <Grid container spacing={1}>
+                      <Grid item xs={6}>
+                        <Typography variant="subtitle1">
+                          {BillingMethodToString(billingMethod, t)}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        {billingMethod === BillingMethod.Invoice && (
+                          <>
+                            <Typography variant="subtitle1">
+                              {t(translations.checkout.billing.billingAddress)}
+                            </Typography>
+                            <Typography variant="subtitle2">
+                              {billingAddress.street}
+                            </Typography>
+                            <Typography variant="subtitle2">
+                              {billingAddress.zipCode} {billingAddress.city}
+                            </Typography>
+                          </>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </StyledCard>
+              </Grid>
+
+              <Grid item xs={12}>
+                <StyledCard>
+                  <CardContent>
+                    <ItemsGrid readOnly />
+                  </CardContent>
+                </StyledCard>
+              </Grid>
             </Grid>
           </>
         );
@@ -218,11 +283,11 @@ export function CheckoutPage() {
         <StyledPaper>
           <>
             {cart && cart.items.length === 0 && (
-              <Typography>{t('checkout.cartEmpty')}</Typography>
+              <Typography>{t(translations.checkout.cartEmpty)}</Typography>
             )}
             {cart && cart.items.length > 0 && (
               <StyledDiv>
-                <Typography>{t('checkout.title')}</Typography>
+                <Typography>{t(translations.checkout.title)}</Typography>
 
                 <StyledStepper activeStep={activeStep}>
                   {steps.map((step, index) => (
@@ -241,7 +306,7 @@ export function CheckoutPage() {
                       color="primary"
                       onClick={handleGoBack}
                     >
-                      {t('checkout.actions.previous')}
+                      {t(translations.checkout.actions.previous)}
                     </Button>
                   )}
 
@@ -252,12 +317,18 @@ export function CheckoutPage() {
                       disabled={nextDisabled()}
                       onClick={handleNext}
                     >
-                      {t('checkout.actions.next')}
+                      {t(translations.checkout.actions.next)}
                     </Button>
                   )}
 
                   {activeStep === steps.length - 1 && (
-                    <SendOrderButton>Huuhaa</SendOrderButton>
+                    <SendOrderButton
+                      color="primary"
+                      variant="contained"
+                      endIcon={<SendIcon />}
+                    >
+                      {t(translations.checkout.actions.sendOrder)}
+                    </SendOrderButton>
                   )}
                 </NavigationButtons>
               </StyledDiv>
@@ -280,6 +351,20 @@ const StyledDiv = styled.div`
   flex-direction: column;
 `;
 
+const StyledCard = styled(Card)`
+  padding: 0.5em;
+  height: 100%;
+
+  & hr {
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+  }
+
+  & .MuiContainer-root {
+    max-height: 45vh;
+  }
+`;
+
 const ViewDiv = styled.div`
   padding: 2em;
 `;
@@ -297,7 +382,6 @@ const NavigationButtons = styled.div`
   & Button + Button {
     margin-left: 1em;
   }
-  /* justify-content: flex-end; */
 `;
 
 const SendOrderButton = styled(Button)`

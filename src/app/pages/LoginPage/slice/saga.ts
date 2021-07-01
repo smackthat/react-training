@@ -89,6 +89,7 @@ function* getUserCart() {
         arr.push({
           productId: item.id,
           title: item.title,
+          unitPrice: item.price,
           quantity: items[i].quantity,
           sum: Math.round(item.price * items[i].quantity * 100) / 100,
         });

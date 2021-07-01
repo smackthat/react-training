@@ -12,7 +12,8 @@
       "addToCart": "Add to cart!"
     },
     "description": "Description",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "unitPrice": "Unit price"
   },
   "minicart": {
     "title": "Title",
@@ -38,6 +39,11 @@
     "password": "Password",
     "actions": {
       "login": "Log in!"
+    },
+    "validation": {
+      "userNameEmpty": "User name is empty",
+      "userNotFound": "User not found",
+      "passwordIsEmpty": "Password is empty"
     }
   },
   "products": {
@@ -61,7 +67,21 @@
     "title": "Checkout",
     "actions": {
       "previous": "Previous",
-      "next": "Next"
+      "next": "Next",
+      "sendOrder": "Send order"
+    },
+    "delivery": {
+      "deliveryAddress": "Delivery address",
+      "deliveryMethod": "Delivery method"
+    },
+    "billing": {
+      "billingMethod": {
+        "invoice": "Invoice",
+        "credit": "Credit",
+        "cash": "Cash (on delivery)"
+      },
+      "billingAddress": "Billing address",
+      "title": "Billing method"
     }
   },
   "languages": {
@@ -75,5 +95,8 @@
   },
   "order": {
     "deliveryDate": "Delivery date"
+  },
+  "errors": {
+    "apiError": "Something went wrong."
   }
 }
