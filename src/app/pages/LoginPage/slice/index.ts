@@ -6,6 +6,7 @@ import {
   Cart,
   ItemAndQuantity,
   ProductAndQuantity,
+  Order,
 } from './../../../../types/User';
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 import { userSaga } from './saga';
@@ -13,6 +14,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 
 const USER: string = 'user';
 const USERCART: string = 'usercart';
+const ORDERHISTORY: string = 'orderhistory';
 
 const getUserFromStorage: () => User = () => {
   const userFromStorage = sessionStorage.getItem(USER);
@@ -121,6 +123,13 @@ const slice = createSlice({
       state.cart = action.payload;
 
       sessionStorage.setItem(USERCART, JSON.stringify(action.payload));
+    },
+    addOrder(state, action: PayloadAction<Order>) {
+      state.orderHistory.push(action.payload);
+      state.cart.items = [];
+
+      sessionStorage.setItem(ORDERHISTORY, JSON.stringify(state.orderHistory));
+      sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
     },
   },
 });

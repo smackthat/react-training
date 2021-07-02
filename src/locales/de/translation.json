@@ -71,7 +71,8 @@
     },
     "delivery": {
       "deliveryAddress": "",
-      "deliveryMethod": ""
+      "deliveryMethod": "",
+      "invalidDate": ""
     },
     "billing": {
       "billingMethod": {
@@ -80,8 +81,10 @@
         "cash": ""
       },
       "billingAddress": "",
-      "title": ""
-    }
+      "title": "",
+      "sameAsDeliveryAddress": ""
+    },
+    "orderSuccess": ""
   },
   "languages": {
     "english": "",

@@ -9,7 +9,7 @@ import { PageWrapper } from 'app/components/PageWrapper';
 import { translations } from 'locales/translations';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { selectCart } from '../LoginPage/slice/selectors';
 import { Wrapper } from '../Wrapper';
@@ -32,6 +32,10 @@ import Divider from '@material-ui/core/Divider';
 import { BillingMethod, BillingMethodToString } from 'types/BillingMethod';
 import { ItemsGrid } from 'app/components/ItemsGrid';
 import SendIcon from '@material-ui/icons/Send';
+import Checkbox from '@material-ui/core/Checkbox';
+import { useUserSlice } from '../LoginPage/slice';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 const defaultAddress: Address = {
   street: '',
@@ -41,6 +45,8 @@ const defaultAddress: Address = {
 
 export function CheckoutPage() {
   const { i18n, t } = useTranslation();
+  const dispatch = useDispatch();
+  const slice = useUserSlice();
 
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const [deliveryDate, setDeliveryDate] = React.useState<Date>(null);
@@ -51,6 +57,14 @@ export function CheckoutPage() {
     defaultAddress,
   );
   const [billingMethod, setBillingMethod] = React.useState<BillingMethod>(null);
+  const [
+    useDeliveryAddressForBilling,
+    setUseDeliveryAddressForBilling,
+  ] = React.useState<boolean>(false);
+
+  const [successToastOpen, setSuccessToastOpen] = React.useState<boolean>(
+    false,
+  );
 
   const cart = useSelector(selectCart);
 
@@ -89,15 +103,58 @@ export function CheckoutPage() {
     setBillingMethod(+(e.target as HTMLInputElement).value);
   };
 
+  const handleSendOrder = () => {
+    dispatch(
+      slice.actions.addOrder({
+        deliveryDate: deliveryDate.getTime(),
+        deliveryAddress: deliveryAddress,
+        billingAddress:
+          billingMethod === BillingMethod.Invoice
+            ? useDeliveryAddressForBilling
+              ? deliveryAddress
+              : billingAddress
+            : undefined,
+        billingMethod: billingMethod,
+        items: cart.items,
+        totalSum: cart.items.map(i => i.sum).reduce((a, b) => a + b),
+      }),
+    );
+
+    setSuccessToastOpen(true);
+  };
+
+  const handleSuccessToastClose = () => {
+    setSuccessToastOpen(false);
+  };
+
+  const renderBillingAddressInfo = () => {
+    return (
+      <>
+        <Typography variant="subtitle2">{deliveryAddress.street}</Typography>
+        <Typography variant="subtitle2">
+          {deliveryAddress.zipCode} {deliveryAddress.city}
+        </Typography>
+      </>
+    );
+  };
+
   const nextDisabled = () => {
     switch (activeStep) {
       case 0:
-        return !(addressValid(deliveryAddress) && !!deliveryDate);
+        return !(
+          addressValid(deliveryAddress) &&
+          !!deliveryDate &&
+          !isNaN(deliveryDate.getSeconds())
+        );
       case 1:
         if (billingMethod === null) {
           return true;
         }
         if (billingMethod === BillingMethod.Invoice) {
+          if (useDeliveryAddressForBilling) {
+            return false;
+          }
+
           return !addressValid(billingAddress);
         }
         return false;
@@ -125,6 +182,7 @@ export function CheckoutPage() {
             >
               <KeyboardDatePicker
                 disableToolbar
+                disablePast
                 variant="inline"
                 format="MM/dd/yyyy"
                 margin="normal"
@@ -132,6 +190,9 @@ export function CheckoutPage() {
                 label={t(translations.order.deliveryDate)}
                 value={deliveryDate}
                 onChange={handleDeliveryDateChange}
+                invalidDateMessage={t(
+                  translations.checkout.delivery.invalidDate,
+                )}
                 KeyboardButtonProps={{
                   'aria-label': 'change delivery date',
                 }}
@@ -184,10 +245,27 @@ export function CheckoutPage() {
                     <FormLabel component="legend">
                       {t(translations.checkout.billing.billingAddress)}
                     </FormLabel>
-                    <AddressInput
-                      address={billingAddress}
-                      setAddress={setBillingAddress}
-                    ></AddressInput>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={useDeliveryAddressForBilling}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setUseDeliveryAddressForBilling(e.target.checked)
+                          }
+                          name="checkedB"
+                          color="primary"
+                        />
+                      }
+                      label={t(
+                        translations.checkout.billing.sameAsDeliveryAddress,
+                      )}
+                    />
+                    {!useDeliveryAddressForBilling && (
+                      <AddressInput
+                        address={billingAddress}
+                        setAddress={setBillingAddress}
+                      ></AddressInput>
+                    )}
                   </>
                 )}
               </Grid>
@@ -210,12 +288,7 @@ export function CheckoutPage() {
                         <Typography variant="subtitle1">
                           {t(translations.checkout.delivery.deliveryAddress)}
                         </Typography>
-                        <Typography variant="subtitle2">
-                          {deliveryAddress.street}
-                        </Typography>
-                        <Typography variant="subtitle2">
-                          {deliveryAddress.zipCode} {deliveryAddress.city}
-                        </Typography>
+                        {renderBillingAddressInfo()}
                       </Grid>
                       <Grid item xs={6}>
                         <Typography variant="subtitle1">
@@ -249,12 +322,19 @@ export function CheckoutPage() {
                             <Typography variant="subtitle1">
                               {t(translations.checkout.billing.billingAddress)}
                             </Typography>
-                            <Typography variant="subtitle2">
-                              {billingAddress.street}
-                            </Typography>
-                            <Typography variant="subtitle2">
-                              {billingAddress.zipCode} {billingAddress.city}
-                            </Typography>
+                            {!useDeliveryAddressForBilling && (
+                              <>
+                                <Typography variant="subtitle2">
+                                  {billingAddress.street}
+                                </Typography>
+                                <Typography variant="subtitle2">
+                                  {billingAddress.zipCode} {billingAddress.city}
+                                </Typography>
+                              </>
+                            )}
+                            {useDeliveryAddressForBilling && (
+                              <>{renderBillingAddressInfo()}</>
+                            )}
                           </>
                         )}
                       </Grid>
@@ -326,6 +406,7 @@ export function CheckoutPage() {
                       color="primary"
                       variant="contained"
                       endIcon={<SendIcon />}
+                      onClick={handleSendOrder}
                     >
                       {t(translations.checkout.actions.sendOrder)}
                     </SendOrderButton>
@@ -336,6 +417,16 @@ export function CheckoutPage() {
           </>
         </StyledPaper>
       </Wrapper>
+
+      <Snackbar
+        open={successToastOpen}
+        autoHideDuration={6000}
+        onClose={handleSuccessToastClose}
+      >
+        <Alert onClose={handleSuccessToastClose} severity="success">
+          {t(translations.checkout.orderSuccess)}
+        </Alert>
+      </Snackbar>
     </PageWrapper>
   );
 }

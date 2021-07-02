@@ -35,11 +35,12 @@ export interface Address {
 }
 
 export interface Order {
-  deliveryDate: Date;
+  deliveryDate: number;
   deliveryAddress: Address;
   billingMethod: BillingMethod;
   billingAddress?: Address;
   items: CartItem[];
+  totalSum: number;
 }
 
 export interface UserState {

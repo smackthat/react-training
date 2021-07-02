@@ -72,7 +72,8 @@
     },
     "delivery": {
       "deliveryAddress": "Toimitusosoite",
-      "deliveryMethod": "Toimitustapa"
+      "deliveryMethod": "Toimitustapa",
+      "invalidDate": "Virheellinen päivämäärä"
     },
     "billing": {
       "billingMethod": {
@@ -81,8 +82,10 @@
         "cash": "Käteinen (toimituksen yhteydessä)"
       },
       "billingAddress": "Laskutusosoite",
-      "title": "Laskutustapa"
-    }
+      "title": "Laskutustapa",
+      "sameAsDeliveryAddress": "Sama kuin toimitusosoite"
+    },
+    "orderSuccess": "Tilaus lähetetty. Kiitos ostoksista! ❤"
   },
   "languages": {
     "english": "Englanti",
