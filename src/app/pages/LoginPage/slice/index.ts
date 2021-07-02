@@ -7,6 +7,7 @@ import {
   ItemAndQuantity,
   ProductAndQuantity,
   Order,
+  Address,
 } from './../../../../types/User';
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 import { userSaga } from './saga';
@@ -15,6 +16,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 const USER: string = 'user';
 const USERCART: string = 'usercart';
 const ORDERHISTORY: string = 'orderhistory';
+const ADDRESSES: string = 'addresses';
 
 const getUserFromStorage: () => User = () => {
   const userFromStorage = sessionStorage.getItem(USER);
@@ -36,13 +38,23 @@ const getCartFromStorage: () => Cart = () => {
   return null;
 };
 
+const getAddressesFromStorage: () => Address[] = () => {
+  const addressesFromStorage = sessionStorage.getItem(ADDRESSES);
+
+  if (addressesFromStorage) {
+    return JSON.parse(addressesFromStorage);
+  }
+
+  return [];
+};
+
 export const initialState: UserState = {
   user: getUserFromStorage(),
   loading: false,
   error: [],
   cart: getCartFromStorage(),
   orderHistory: [],
-  addresses: [],
+  addresses: getAddressesFromStorage(),
 };
 
 const slice = createSlice({
@@ -60,6 +72,8 @@ const slice = createSlice({
 
       sessionStorage.removeItem(USER);
       sessionStorage.removeItem(USERCART);
+      sessionStorage.removeItem(ORDERHISTORY);
+      sessionStorage.removeItem(ADDRESSES);
     },
     userLoaded(state, action: PayloadAction<User>) {
       const user = action.payload;
@@ -130,6 +144,22 @@ const slice = createSlice({
 
       sessionStorage.setItem(ORDERHISTORY, JSON.stringify(state.orderHistory));
       sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
+    },
+    addToAddresses(state, action: PayloadAction<Address[]>) {
+      action.payload.forEach(address => {
+        if (
+          !state.addresses.some(
+            a =>
+              a.city === address.city &&
+              a.street === address.street &&
+              a.zipCode === address.zipCode,
+          )
+        ) {
+          state.addresses.push(address);
+        }
+      });
+
+      sessionStorage.setItem(ADDRESSES, JSON.stringify(state.addresses));
     },
   },
 });

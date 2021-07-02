@@ -11,7 +11,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { selectCart } from '../LoginPage/slice/selectors';
+import { selectAddresses, selectCart } from '../LoginPage/slice/selectors';
 import { Wrapper } from '../Wrapper';
 import {
   KeyboardDatePicker,
@@ -36,8 +36,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useUserSlice } from '../LoginPage/slice';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import { AddressSelect } from 'app/components/AddressSelect';
 
-const defaultAddress: Address = {
+export const defaultAddress: Address = {
   street: '',
   zipCode: null,
   city: '',
@@ -67,6 +68,7 @@ export function CheckoutPage() {
   );
 
   const cart = useSelector(selectCart);
+  const addresses = useSelector(selectAddresses);
 
   const steps = React.useMemo(
     () => [
@@ -121,6 +123,13 @@ export function CheckoutPage() {
     );
 
     setSuccessToastOpen(true);
+
+    let addressesToAdd = [deliveryAddress];
+
+    if (billingAddress.city.length > 0) {
+      addressesToAdd.push(billingAddress);
+    }
+    dispatch(slice.actions.addToAddresses(addressesToAdd));
   };
 
   const handleSuccessToastClose = () => {
@@ -168,46 +177,67 @@ export function CheckoutPage() {
       case 0: // Delivery info
         return (
           <>
-            <FormLabel component="legend">
-              {t(translations.checkout.delivery.deliveryAddress)}
-            </FormLabel>
-            <AddressInput
-              address={deliveryAddress}
-              setAddress={setDeliveryAddress}
-            ></AddressInput>
+            <StyledGrid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <FormLabel component="legend">
+                  {t(translations.checkout.delivery.deliveryAddress)}
+                </FormLabel>
+                <AddressInput
+                  address={deliveryAddress}
+                  setAddress={setDeliveryAddress}
+                ></AddressInput>
 
-            <MuiPickersUtilsProvider
-              utils={DateFnsUtils}
-              locale={dateLocale[i18n.language]}
-            >
-              <KeyboardDatePicker
-                disableToolbar
-                disablePast
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label={t(translations.order.deliveryDate)}
-                value={deliveryDate}
-                onChange={handleDeliveryDateChange}
-                invalidDateMessage={t(
-                  translations.checkout.delivery.invalidDate,
+                <MuiPickersUtilsProvider
+                  utils={DateFnsUtils}
+                  locale={dateLocale[i18n.language]}
+                >
+                  <KeyboardDatePicker
+                    disableToolbar
+                    disablePast
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label={t(translations.order.deliveryDate)}
+                    value={deliveryDate}
+                    onChange={handleDeliveryDateChange}
+                    minDateMessage={t(
+                      translations.checkout.delivery.minDateMessage,
+                    )}
+                    maxDateMessage={t(
+                      translations.checkout.delivery.maxDateMessage,
+                    )}
+                    invalidDateMessage={t(
+                      translations.checkout.delivery.invalidDate,
+                    )}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change delivery date',
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                {addresses.length > 0 && (
+                  <>
+                    <FormLabel component="legend">
+                      {t(translations.checkout.delivery.chooseDeliveryAddress)}
+                    </FormLabel>
+                    <AddressSelect setSelectedAddress={setDeliveryAddress} />
+                  </>
                 )}
-                KeyboardButtonProps={{
-                  'aria-label': 'change delivery date',
-                }}
-              />
-            </MuiPickersUtilsProvider>
+              </Grid>
+            </StyledGrid>
           </>
         );
       case 1: // Billing info
         return (
           <>
-            <Grid container spacing={1}>
+            <StyledGrid container justify="flex-end" spacing={3}>
               <Grid item xs={12} md={6}>
                 <FormControl component="fieldset">
                   <FormLabel component="legend">
-                    {t('checkout.billing.title')}
+                    {t(translations.checkout.billing.title)}
                   </FormLabel>
                   <RadioGroup
                     aria-label="billing method"
@@ -269,13 +299,24 @@ export function CheckoutPage() {
                   </>
                 )}
               </Grid>
-            </Grid>
+              <Grid item xs={12} md={6}>
+                {billingMethod === BillingMethod.Invoice &&
+                  !useDeliveryAddressForBilling && (
+                    <>
+                      <FormLabel component="legend">
+                        {t(translations.checkout.delivery.chooseBillingAddress)}
+                      </FormLabel>
+                      <AddressSelect setSelectedAddress={setBillingAddress} />
+                    </>
+                  )}
+              </Grid>
+            </StyledGrid>
           </>
         );
       case 2: // Review
         return (
           <>
-            <Grid container spacing={1}>
+            <StyledGrid container spacing={1}>
               <Grid item xs={12} md={6}>
                 <StyledCard>
                   <CardContent>
@@ -307,7 +348,7 @@ export function CheckoutPage() {
                 <StyledCard>
                   <CardContent>
                     <FormLabel component="legend">
-                      {t('checkout.billing.title')}
+                      {t(translations.checkout.billing.title)}
                     </FormLabel>
                     <Divider />
                     <Grid container spacing={1}>
@@ -350,7 +391,7 @@ export function CheckoutPage() {
                   </CardContent>
                 </StyledCard>
               </Grid>
-            </Grid>
+            </StyledGrid>
           </>
         );
     }
@@ -440,6 +481,12 @@ const StyledPaper = styled(Paper)`
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const StyledGrid = styled(Grid)`
+  & legend {
+    margin-bottom: 0.5em;
+  }
 `;
 
 const StyledCard = styled(Card)`

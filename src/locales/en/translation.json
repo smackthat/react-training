@@ -73,7 +73,11 @@
     "delivery": {
       "deliveryAddress": "Delivery address",
       "deliveryMethod": "Delivery method",
-      "invalidDate": "Invalid date"
+      "invalidDate": "Invalid date",
+      "minDateMessage": "Date is under the minimum",
+      "maxDateMessage": "Date is over the maximum",
+      "chooseDeliveryAddress": "Or choose a delivery address",
+      "chooseBillingAddress": "Or choose a billing address"
     },
     "billing": {
       "billingMethod": {

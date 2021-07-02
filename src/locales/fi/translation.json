@@ -73,7 +73,11 @@
     "delivery": {
       "deliveryAddress": "Toimitusosoite",
       "deliveryMethod": "Toimitustapa",
-      "invalidDate": "Virheellinen päivämäärä"
+      "invalidDate": "Virheellinen päivämäärä",
+      "minDateMessage": "Päivämäärä on liian pieni",
+      "maxDateMessage": "Päivämäärä on liian suuri",
+      "chooseDeliveryAddress": "Tai valitse toimitusosoite",
+      "chooseBillingAddress": "Tai valitse laskutusosoite"
     },
     "billing": {
       "billingMethod": {

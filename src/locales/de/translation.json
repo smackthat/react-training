@@ -72,7 +72,11 @@
     "delivery": {
       "deliveryAddress": "",
       "deliveryMethod": "",
-      "invalidDate": ""
+      "invalidDate": "",
+      "minDateMessage": "",
+      "maxDateMessage": "",
+      "chooseDeliveryAddress": "",
+      "chooseBillingAddress": ""
     },
     "billing": {
       "billingMethod": {

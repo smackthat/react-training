@@ -23,3 +23,13 @@ export const selectCart = createSelector(
   userDomain,
   userState => userState.cart,
 );
+
+export const selectAddresses = createSelector(
+  userDomain,
+  userState => userState.addresses,
+);
+
+export const selectOrders = createSelector(
+  userDomain,
+  userState => userState.orderHistory,
+);
