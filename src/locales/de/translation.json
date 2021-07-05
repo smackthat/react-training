@@ -100,7 +100,15 @@
     "city": ""
   },
   "order": {
-    "deliveryDate": ""
+    "deliveryDate": "",
+    "orderHistory": "",
+    "deliveryAddress": "",
+    "billingMethod": "",
+    "billingAddress": "",
+    "totalSum": "",
+    "items": "",
+    "orderDate": "",
+    "noOrders": ""
   },
   "errors": {
     "apiError": ""

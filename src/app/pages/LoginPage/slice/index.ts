@@ -48,12 +48,22 @@ const getAddressesFromStorage: () => Address[] = () => {
   return [];
 };
 
+const getOrderHistoryFromStorage: () => Order[] = () => {
+  const orderHistoryFromStorage = sessionStorage.getItem(ORDERHISTORY);
+
+  if (orderHistoryFromStorage) {
+    return JSON.parse(orderHistoryFromStorage);
+  }
+
+  return [];
+};
+
 export const initialState: UserState = {
   user: getUserFromStorage(),
   loading: false,
   error: [],
   cart: getCartFromStorage(),
-  orderHistory: [],
+  orderHistory: getOrderHistoryFromStorage(),
   addresses: getAddressesFromStorage(),
 };
 

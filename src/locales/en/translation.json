@@ -101,7 +101,15 @@
     "city": "City"
   },
   "order": {
-    "deliveryDate": "Delivery date"
+    "deliveryDate": "Delivery date",
+    "orderHistory": "Order history",
+    "deliveryAddress": "Delivery address",
+    "billingMethod": "Billing method",
+    "billingAddress": "Billing address",
+    "totalSum": "Total sum",
+    "items": "Order items",
+    "orderDate": "Order date",
+    "noOrders": "No orders"
   },
   "errors": {
     "apiError": "Something went wrong."

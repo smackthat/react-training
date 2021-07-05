@@ -5,6 +5,7 @@ import { selectAddresses } from 'app/pages/LoginPage/slice/selectors';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Address } from 'types/User';
+import { formatAddress } from 'utils/formatters';
 
 interface Props {
   setSelectedAddress: React.Dispatch<React.SetStateAction<Address>>;
@@ -21,10 +22,6 @@ export function AddressSelect({ setSelectedAddress }: Props) {
     } else {
       setSelectedAddress(value as Address);
     }
-  };
-
-  const formatAddress = (address: Address) => {
-    return `${address.street}, ${address.zipCode} ${address.city}`;
   };
 
   return (

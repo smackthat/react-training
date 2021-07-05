@@ -35,7 +35,7 @@ export function ProfileButton() {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         keepMounted
       >
-        <StyledLink to="/">
+        <StyledLink to="/orderhistory">
           <MenuItem onClick={handleClose}>
             {t(translations.header.actions.orderHistory)}
           </MenuItem>

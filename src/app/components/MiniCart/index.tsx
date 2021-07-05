@@ -72,7 +72,7 @@ export function MiniCart() {
               <CartItems>
                 {items && items.length > 0 && (
                   <>
-                    <ItemsGrid smallSize />
+                    <ItemsGrid items={items} smallSize />
 
                     <Button
                       variant="outlined"

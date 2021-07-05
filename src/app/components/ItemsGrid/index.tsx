@@ -7,11 +7,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { useUserSlice } from 'app/pages/LoginPage/slice';
-import { selectCart } from 'app/pages/LoginPage/slice/selectors';
 import { translations } from 'locales/translations';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { CartItem } from 'types/User';
 import { CurrencyFormatter } from 'utils/formatters';
@@ -32,16 +31,19 @@ interface Sorting {
 }
 
 interface Props {
+  items: CartItem[];
   readOnly?: boolean;
   smallSize?: boolean;
 }
 
-export function ItemsGrid({ readOnly = false, smallSize = false }: Props) {
+export function ItemsGrid({
+  items = [],
+  readOnly = false,
+  smallSize = false,
+}: Props) {
   const { t } = useTranslation();
   const slice = useUserSlice();
   const dispatch = useDispatch();
-
-  const cart = useSelector(selectCart);
 
   const [sortBy, setSortBy] = React.useState<Sorting>({
     column: SortByColumn.TITLE,
@@ -51,12 +53,6 @@ export function ItemsGrid({ readOnly = false, smallSize = false }: Props) {
   const currencyFormatter = React.useMemo(() => {
     return CurrencyFormatter();
   }, []);
-
-  let items: CartItem[] = [];
-
-  if (cart && cart.items) {
-    items = cart.items.slice();
-  }
 
   if (items && sortBy) {
     switch (sortBy.column) {
@@ -162,7 +158,7 @@ export function ItemsGrid({ readOnly = false, smallSize = false }: Props) {
                     }
                     onClick={() => handleSorting(SortByColumn.UNITPRICE)}
                   >
-                    {t('product.unitPrice')}
+                    {t(translations.product.unitPrice)}
                   </TableSortLabel>
                 </TableCell>
               )}
@@ -225,12 +221,12 @@ export function ItemsGrid({ readOnly = false, smallSize = false }: Props) {
             <TableRow className="totals">
               <TableCell>{t(translations.minicart.total)}</TableCell>
               <TableCell align="right">
-                {cart.items.map(p => p.quantity).reduce((a, b) => a + b)}
+                {items.map(p => p.quantity).reduce((a, b) => a + b)}
               </TableCell>
               {!smallSize && <TableCell />}
               <TableCell align="right">
                 {currencyFormatter.format(
-                  cart.items.map(p => p.sum).reduce((a, b) => a + b),
+                  items.map(p => p.sum).reduce((a, b) => a + b),
                 )}
               </TableCell>
               <TableCell></TableCell>

@@ -25,6 +25,7 @@ import { CheckoutPage } from './pages/CheckoutPage/Loadable';
 import { useSelector } from 'react-redux';
 import { selectUser } from './pages/LoginPage/slice/selectors';
 import { useUserSlice } from './pages/LoginPage/slice';
+import { OrderHistoryPage } from './pages/OrderHistoryPage/Loadable';
 
 export function App() {
   const { i18n } = useTranslation();
@@ -58,6 +59,7 @@ export function App() {
         <Route exact path="/products/search/:search" component={ProductsPage} />
         <Route exact path="/product/:id" component={ProductPage} />
         <Route exact path="/" component={HomePage} />
+        <Route exact path="/orderhistory" component={OrderHistoryPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

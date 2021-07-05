@@ -101,7 +101,15 @@
     "city": "Kaupunki"
   },
   "order": {
-    "deliveryDate": "Toimituspvm"
+    "deliveryDate": "Toimituspvm",
+    "orderHistory": "Tilaushistoria",
+    "deliveryAddress": "Toimitusosoite",
+    "billingMethod": "Laskutustapa",
+    "billingAddress": "Laskutusosoite",
+    "totalSum": "Summa yht.",
+    "items": "Tilauksen tuotteet",
+    "orderDate": "Tilauspvm",
+    "noOrders": "Ei tilauksia"
   },
   "errors": {
     "apiError": "Jokin meni pieleen."

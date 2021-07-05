@@ -18,7 +18,7 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { Address } from 'types/User';
+import { Address, CartItem } from 'types/User';
 import { dateLocale } from 'locales/i18n';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -70,6 +70,12 @@ export function CheckoutPage() {
   const cart = useSelector(selectCart);
   const addresses = useSelector(selectAddresses);
 
+  let items: CartItem[] = [];
+
+  if (cart && cart.items) {
+    items = cart.items.slice();
+  }
+
   const steps = React.useMemo(
     () => [
       t(translations.checkout.steps.delivery),
@@ -108,6 +114,7 @@ export function CheckoutPage() {
   const handleSendOrder = () => {
     dispatch(
       slice.actions.addOrder({
+        orderDate: new Date().getTime(),
         deliveryDate: deliveryDate.getTime(),
         deliveryAddress: deliveryAddress,
         billingAddress:
@@ -387,7 +394,7 @@ export function CheckoutPage() {
               <Grid item xs={12}>
                 <StyledCard>
                   <CardContent>
-                    <ItemsGrid readOnly />
+                    <ItemsGrid items={items} readOnly />
                   </CardContent>
                 </StyledCard>
               </Grid>

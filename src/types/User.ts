@@ -35,6 +35,7 @@ export interface Address {
 }
 
 export interface Order {
+  orderDate: number;
   deliveryDate: number;
   deliveryAddress: Address;
   billingMethod: BillingMethod;
