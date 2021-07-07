@@ -175,7 +175,7 @@ export function ItemsGrid({
                   {t(translations.minicart.sum)}
                 </TableSortLabel>
               </TableCell>
-              <TableCell></TableCell>
+              {!readOnly && <TableCell></TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>

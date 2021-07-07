@@ -74,15 +74,15 @@ export function ProductPage() {
           <StyledPaper>
             <Grid container spacing={8}>
               <Grid item xs={4}>
-                <StyledImg src={product.image} alt={product.title} />
+                <StyledImg src={product?.image} alt={product?.title} />
               </Grid>
               <Grid item xs={8} md={6}>
                 <ProductDetailsDiv>
                   <Typography variant="h6" gutterBottom>
-                    {product.title}
+                    {product?.title}
                   </Typography>
                   <Typography variant="subtitle1" gutterBottom>
-                    {currencyFormatter.format(product.price)}
+                    {currencyFormatter.format(product?.price)}
                   </Typography>
                   {user && (
                     <AddToBasketDiv>
@@ -120,7 +120,7 @@ export function ProductPage() {
                   {t(translations.product.description)}
                 </Typography>
                 <Typography variant="subtitle2">
-                  {product.description}
+                  {product?.description}
                 </Typography>
               </Grid>
             </Grid>
