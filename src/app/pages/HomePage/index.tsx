@@ -5,7 +5,7 @@ import { FeaturedProduct } from 'app/components/FeaturedProduct';
 import { Wrapper } from 'app/pages/Wrapper';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
-import { useProductsSlice } from './slice';
+import { productsActions } from './slice';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLoading, selectProducts } from './slice/selectors';
@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
 export function HomePage() {
-  const productsSlice = useProductsSlice();
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
@@ -24,7 +23,7 @@ export function HomePage() {
 
   useEffect(() => {
     if (products.length === 0) {
-      dispatch(productsSlice.actions.load());
+      dispatch(productsActions.load());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

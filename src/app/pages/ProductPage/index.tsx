@@ -13,7 +13,7 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 import { CurrencyFormatter } from 'utils/formatters';
 import { selectProducts } from '../HomePage/slice/selectors';
-import { useUserSlice } from '../LoginPage/slice';
+import { userActions } from '../LoginPage/slice';
 import { selectCart, selectUser } from '../LoginPage/slice/selectors';
 import { Wrapper } from '../Wrapper';
 
@@ -23,7 +23,7 @@ interface Params {
 
 export function ProductPage() {
   const { id } = useParams<Params>();
-  const actions = useUserSlice().actions;
+  const actions = userActions;
 
   const { t } = useTranslation();
 

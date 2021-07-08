@@ -60,6 +60,7 @@ export function Searchbar() {
   return (
     <StyledPaper>
       <Autocomplete
+        id="searchBarAutocomplete"
         freeSolo
         fullWidth
         open={open}
@@ -75,6 +76,7 @@ export function Searchbar() {
           <TextField
             {...params}
             label={t(translations.header.actions.search)}
+            id="searchInput"
           />
         )}
       ></Autocomplete>

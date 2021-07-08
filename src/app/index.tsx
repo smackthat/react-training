@@ -26,11 +26,13 @@ import { useSelector } from 'react-redux';
 import { selectUser } from './pages/LoginPage/slice/selectors';
 import { useUserSlice } from './pages/LoginPage/slice';
 import { OrderHistoryPage } from './pages/OrderHistoryPage/Loadable';
+import { useProductsSlice } from './pages/HomePage/slice';
 
 export function App() {
   const { i18n } = useTranslation();
 
   useUserSlice();
+  useProductsSlice();
 
   const user = useSelector(selectUser);
 

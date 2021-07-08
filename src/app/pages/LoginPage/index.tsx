@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { UserErrorType, UserLogin } from 'types/User';
 import { Wrapper } from '../Wrapper';
-import { useUserSlice } from './slice';
 import { selectError, selectLoading, selectUser } from './slice/selectors';
 import { loginUser } from './slice/actions';
 import { Redirect } from 'react-router-dom';
@@ -17,8 +16,6 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
 export function LoginPage() {
-  useUserSlice();
-
   const dispatch = useDispatch();
 
   const { t } = useTranslation();

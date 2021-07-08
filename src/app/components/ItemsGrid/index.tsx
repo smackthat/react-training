@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import { useUserSlice } from 'app/pages/LoginPage/slice';
+import { userActions } from 'app/pages/LoginPage/slice';
 import { translations } from 'locales/translations';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -42,7 +42,6 @@ export function ItemsGrid({
   smallSize = false,
 }: Props) {
   const { t } = useTranslation();
-  const slice = useUserSlice();
   const dispatch = useDispatch();
 
   const [sortBy, setSortBy] = React.useState<Sorting>({
@@ -83,7 +82,7 @@ export function ItemsGrid({
 
   const handleProductIncrement = (id: number) => {
     dispatch(
-      slice.actions.incrementCartItem({
+      userActions.incrementCartItem({
         productId: id,
         quantity: 1,
       }),
@@ -92,7 +91,7 @@ export function ItemsGrid({
 
   const handleProductDecrement = (id: number) => {
     dispatch(
-      slice.actions.decrementCartItem({
+      userActions.decrementCartItem({
         productId: id,
         quantity: 1,
       }),
@@ -101,7 +100,7 @@ export function ItemsGrid({
 
   const handleProductRemoveAll = (id: number, qty: number) => {
     dispatch(
-      slice.actions.decrementCartItem({
+      userActions.decrementCartItem({
         productId: id,
         quantity: qty,
       }),

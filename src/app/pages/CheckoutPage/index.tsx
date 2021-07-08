@@ -33,10 +33,10 @@ import { BillingMethod, BillingMethodToString } from 'types/BillingMethod';
 import { ItemsGrid } from 'app/components/ItemsGrid';
 import SendIcon from '@material-ui/icons/Send';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useUserSlice } from '../LoginPage/slice';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import { AddressSelect } from 'app/components/AddressSelect';
+import { userActions } from '../LoginPage/slice';
 
 export const defaultAddress: Address = {
   street: '',
@@ -47,7 +47,6 @@ export const defaultAddress: Address = {
 export function CheckoutPage() {
   const { i18n, t } = useTranslation();
   const dispatch = useDispatch();
-  const slice = useUserSlice();
 
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const [deliveryDate, setDeliveryDate] = React.useState<Date>(null);
@@ -113,7 +112,7 @@ export function CheckoutPage() {
 
   const handleSendOrder = () => {
     dispatch(
-      slice.actions.addOrder({
+      userActions.addOrder({
         orderDate: new Date().getTime(),
         deliveryDate: deliveryDate.getTime(),
         deliveryAddress: deliveryAddress,
@@ -136,7 +135,7 @@ export function CheckoutPage() {
     if (billingAddress.city.length > 0) {
       addressesToAdd.push(billingAddress);
     }
-    dispatch(slice.actions.addToAddresses(addressesToAdd));
+    dispatch(userActions.addToAddresses(addressesToAdd));
   };
 
   const handleSuccessToastClose = () => {

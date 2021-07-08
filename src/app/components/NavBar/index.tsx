@@ -8,15 +8,12 @@ import { PageWrapper } from '../PageWrapper';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { useUserSlice } from 'app/pages/LoginPage/slice';
 import { User } from 'types/User';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { ProfileButton } from '../ProfileButton';
+import { ProfileButton } from 'app/components/ProfileButton';
 
 export function Navbar() {
-  useUserSlice();
-
   const { t } = useTranslation();
 
   const loggedUser: User = useSelector(selectUser);
