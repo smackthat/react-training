@@ -113,5 +113,11 @@
   },
   "errors": {
     "apiError": "Something went wrong."
+  },
+  "items": {
+    "actions": {
+      "increment": "Increment quantity",
+      "decrement": "Decrement quantity"
+    }
   }
 }

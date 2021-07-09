@@ -1,5 +1,6 @@
 import { Product, ProductCategory } from 'types/Product';
-import { User, UserState } from 'types/User';
+import { CartItem, User, UserState } from 'types/User';
+import { currencySum } from './helpers';
 
 export const mockUser: User = {
   id: 2,
@@ -41,11 +42,28 @@ export const mockProducts: Product[] = [
     image: '',
   },
   {
-    id: 1,
+    id: 4,
     title: 'Golden necklace',
     description: 'A nice necklace',
     price: 99.99,
     category: ProductCategory.JEWELERY,
     image: '',
+  },
+];
+
+export const mockCartItems: CartItem[] = [
+  {
+    productId: mockProducts[0].id,
+    title: mockProducts[0].title,
+    quantity: 8,
+    unitPrice: mockProducts[0].price,
+    sum: currencySum(mockProducts[0].price, 8),
+  },
+  {
+    productId: mockProducts[3].id,
+    title: mockProducts[3].title,
+    quantity: 1,
+    unitPrice: mockProducts[3].price,
+    sum: currencySum(mockProducts[3].price, 1),
   },
 ];

@@ -112,5 +112,11 @@
   },
   "errors": {
     "apiError": ""
+  },
+  "items": {
+    "actions": {
+      "increment": "",
+      "decrement": ""
+    }
   }
 }

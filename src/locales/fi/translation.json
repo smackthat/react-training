@@ -113,5 +113,11 @@
   },
   "errors": {
     "apiError": "Jokin meni pieleen."
+  },
+  "items": {
+    "actions": {
+      "increment": "Lisää määrää",
+      "decrement": "Vähennä määrää"
+    }
   }
 }

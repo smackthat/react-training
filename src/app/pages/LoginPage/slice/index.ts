@@ -12,6 +12,7 @@ import {
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 import { userSaga } from './saga';
 import { PayloadAction } from '@reduxjs/toolkit';
+import { currencySum } from 'utils/helpers';
 
 const USER: string = 'user';
 const USERCART: string = 'usercart';
@@ -106,7 +107,7 @@ const slice = createSlice({
 
       if (item) {
         item.quantity += action.payload.quantity;
-        item.sum = Math.round(item.unitPrice * item.quantity * 100) / 100;
+        item.sum = currencySum(item.unitPrice, item.quantity);
 
         sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
       }
@@ -122,9 +123,8 @@ const slice = createSlice({
             p => p.productId !== item.productId,
           );
         } else {
-          const price = item.sum / item.quantity;
           item.quantity -= action.payload.quantity;
-          item.sum = Math.round(price * item.quantity * 100) / 100;
+          item.sum = currencySum(item.unitPrice, item.quantity);
         }
 
         sessionStorage.setItem(USERCART, JSON.stringify(state.cart));
@@ -138,7 +138,7 @@ const slice = createSlice({
         title: pq.product.title,
         quantity: pq.quantity,
         unitPrice: pq.product.price,
-        sum: Math.round(pq.product.price * pq.quantity * 100) / 100,
+        sum: currencySum(pq.product.price, pq.quantity),
       });
 
       sessionStorage.setItem(USERCART, JSON.stringify(state.cart));

@@ -1,3 +1,4 @@
+import { currencySum } from 'utils/helpers';
 import { selectProducts } from 'app/pages/HomePage/slice/selectors';
 import { loginUser } from './actions';
 import { request } from 'utils/request';
@@ -91,7 +92,7 @@ function* getUserCart() {
           title: item.title,
           unitPrice: item.price,
           quantity: items[i].quantity,
-          sum: Math.round(item.price * items[i].quantity * 100) / 100,
+          sum: currencySum(item.price, items[i].quantity),
         });
       }
 

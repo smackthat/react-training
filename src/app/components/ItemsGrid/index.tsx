@@ -193,12 +193,14 @@ export function ItemsGrid({
                 {!readOnly && (
                   <TableCell>
                     <IconButton
+                      aria-label={t(translations.items.actions.increment)}
                       size="small"
                       onClick={() => handleProductIncrement(item.productId)}
                     >
                       <AddIcon />
                     </IconButton>
                     <IconButton
+                      aria-label={t(translations.items.actions.decrement)}
                       size="small"
                       onClick={() => handleProductDecrement(item.productId)}
                     >
