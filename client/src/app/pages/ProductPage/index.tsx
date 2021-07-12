@@ -65,7 +65,7 @@ export function ProductPage() {
   return (
     <>
       <Helmet>
-        <title>Shoppe</title>
+        <title>Shoppe - {product?.title}</title>
         <meta name="description" content="Product page" />
       </Helmet>
 
