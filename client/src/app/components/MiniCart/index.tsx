@@ -5,7 +5,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import styled from 'styled-components';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCart } from 'app/pages/LoginPage/slice/selectors';
 import Button from '@material-ui/core/Button';
 import { useTranslation } from 'react-i18next';
@@ -13,13 +13,18 @@ import { translations } from 'locales/translations';
 import { CartItem } from 'types/User';
 import { Link } from 'react-router-dom';
 import { ItemsGrid } from '../ItemsGrid';
+import { saveCart } from 'app/pages/LoginPage/slice/actions';
+import { selectLoading } from 'app/pages/HomePage/slice/selectors';
+import { LoadingIndicator } from '../LoadingIndicator';
 
 export function MiniCart() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const cart = useSelector(selectCart);
+  const loading = useSelector(selectLoading);
 
   let items: CartItem[] = [];
 
@@ -43,6 +48,10 @@ export function MiniCart() {
 
   const handleCheckoutClick = () => {
     setAnchorEl(null);
+  };
+
+  const handleCartSave = () => {
+    dispatch(saveCart());
   };
 
   const open = Boolean(anchorEl);
@@ -70,22 +79,34 @@ export function MiniCart() {
           <Fade {...TransitionProps} timeout={100}>
             <ClickAwayListener onClickAway={handleClickAway}>
               <CartItems>
-                {items && items.length > 0 && (
+                {loading && <LoadingIndicator />}
+                {!loading && items && items.length > 0 && (
                   <>
                     <ItemsGrid items={items} smallSize />
 
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      component={Link}
-                      to="/checkout"
-                      onClick={handleCheckoutClick}
-                    >
-                      {t(translations.minicart.actions.toCheckout)}
-                    </Button>
+                    <BottomDiv>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleCartSave}
+                        disabled={loading}
+                      >
+                        {t('minicart.actions.saveCart')}
+                      </Button>
+
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        component={Link}
+                        to="/checkout"
+                        onClick={handleCheckoutClick}
+                      >
+                        {t(translations.minicart.actions.toCheckout)}
+                      </Button>
+                    </BottomDiv>
                   </>
                 )}
-                {items.length === 0 && (
+                {!loading && items.length === 0 && (
                   <h4>{t(translations.minicart.noItems)}</h4>
                 )}
               </CartItems>
@@ -127,9 +148,17 @@ const CartItems = styled.div`
     width: 85vw;
   }
 
-  > a {
-    margin-top: 2em;
+  > .MuiButtonBase-root {
     align-self: flex-end;
     position: sticky;
+    margin-left: 4em;
   }
+`;
+
+const BottomDiv = styled.div`
+  margin-top: 2em;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 `;

@@ -1,26 +1,28 @@
 import { currencySum } from 'utils/helpers';
 import { selectProducts } from 'app/pages/HomePage/slice/selectors';
-import { loginUser } from './actions';
+import { loginUser, saveCart } from './actions';
 import { request } from 'utils/request';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   UserLogin,
   UserErrorType,
-  User,
   CartItem,
   ItemAndQuantity,
+  Cart,
+  User,
 } from './../../../../types/User';
 import { userActions } from '.';
-import { put, takeLatest, delay, select, call } from 'redux-saga/effects';
-import { selectUser } from './selectors';
+import { put, takeLatest, select, call, delay } from 'redux-saga/effects';
+import { selectUser, selectCart } from './selectors';
 import { Product } from 'types/Product';
 
-const baseUrl: string = 'https://fakestoreapi.com';
+const baseUrl: string = 'http://localhost:3001/api';
+const APITOKEN: string = 'apiToken';
 
 export function* getUser(userLoginPayload: PayloadAction<UserLogin>) {
   const userLogin = userLoginPayload.payload;
 
-  const userNameMissing = userLogin.name.length === 0;
+  const userNameMissing = userLogin.username.length === 0;
   const passwordMissing = userLogin.password.length === 0;
 
   yield put(userActions.clearError());
@@ -38,44 +40,15 @@ export function* getUser(userLoginPayload: PayloadAction<UserLogin>) {
 
   yield put(userActions.loadUser());
 
-  yield delay(500);
-
   try {
-    // FakeStoreAPI has cors error, so let's just mock this for now...
-    // const body = {
-    //   username: userLogin.name,
-    //   password: userLogin.password,
-    // };
-
-    // const a = yield call(request, `${baseUrl}/auth/login`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(body),
-    // });
-
-    // Some hardcodings for now... (from https://fakestoreapi.com/users/)
-    yield put(
-      userActions.userLoaded({
-        id: 2,
-        userName: 'mor_2314',
-      }),
-    );
-
-    // Load the user cart after successful user load
-    yield getUserCart();
-  } catch (error) {
-    yield put(userActions.userError(UserErrorType.RESPONSE_ERROR));
-  }
-}
-
-function* getUserCart() {
-  yield delay(500);
-
-  // Select username from store
-  const user: User = yield select(selectUser);
-
-  try {
-    const url = `${baseUrl}/carts/user/${user.id}`;
-    const cart = yield call(request, url);
+    const res = yield call(request, `${baseUrl}/auth/login`, {
+      method: 'POST',
+      headers: {
+        Accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userLogin)
+    });
 
     const products: Product[] = yield select(selectProducts);
 
@@ -100,15 +73,58 @@ function* getUserCart() {
     };
 
     yield put(
-      userActions.setCart({
-        items: mapCartItems(cart[0].products),
+      userActions.userLoaded({
+        user: {
+          userId: res.user.userId,
+          userName: res.user.userName,
+          name: res.user.name,
+          email: res.user.email,
+        },
+        cart: {
+          items: mapCartItems(res.user.cart),
+        },
+        addresses: res.user.addresses,
       }),
     );
+
+    sessionStorage.setItem(APITOKEN, res.token);
+
   } catch (error) {
-    console.log('Something went amiss: ', error);
+    yield put(userActions.userError(UserErrorType.RESPONSE_ERROR));
+  }
+}
+
+function* saveUserCart() {
+  yield put(userActions.loadUser());
+
+  const cart: Cart = yield select(selectCart);
+  const user: User = yield select(selectUser);
+
+  try {
+    const items: ItemAndQuantity[] = cart.items.map(i => ({
+      productId: i.productId,
+      quantity: i.quantity,
+    }));
+
+    yield call(request, `${baseUrl}/user/${user.userId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        cart: items,
+      }),
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem(APITOKEN)}`,
+        Accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    yield put(userActions.loadEnd());
   }
 }
 
 export function* userSaga() {
   yield takeLatest(loginUser.type, getUser);
+  yield takeLatest(saveCart.type, saveUserCart);
 }

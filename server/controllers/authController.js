@@ -30,7 +30,14 @@ const login = async (req, res) => {
   const token = jwt.sign({ username: user.userName, id: user._id }, process.env.AUTHSECRET);
 
   res.status(StatusCodes.OK)
-    .send({ token });
+    .send({ token: token, user: {
+      userId: user.userId,
+      userName: user.userName,
+      name: user.name,
+      email: user.email,
+      cart: user.cart.map(i => ({productId: i.productId, quantity: i.quantity})),
+      addresses: user.addresses
+    } });
 
 };
 

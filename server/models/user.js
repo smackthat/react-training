@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const cartItem = require('./cartItem');
+const address = require('./address');
 
 const userSchema = new mongoose.Schema({
   userId: {
@@ -18,10 +19,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   cart: [cartItem.schema],
-  addresses: [{
-    type: mongoose.Schema.ObjectId,
-    ref: 'address'
-  }],
+  addresses: [address.schema],
   name: String,
   email: String
 

@@ -18,6 +18,7 @@ const USER: string = 'user';
 const USERCART: string = 'usercart';
 const ORDERHISTORY: string = 'orderhistory';
 const ADDRESSES: string = 'addresses';
+const APITOKEN: string = 'apiToken';
 
 const getUserFromStorage: () => User = () => {
   const userFromStorage = sessionStorage.getItem(USER);
@@ -78,6 +79,9 @@ const slice = createSlice({
     loadUser(state) {
       state.loading = true;
     },
+    loadEnd(state) {
+      state.loading = false;
+    },
     logoutUser(state) {
       state.user = null;
 
@@ -85,13 +89,13 @@ const slice = createSlice({
       sessionStorage.removeItem(USERCART);
       sessionStorage.removeItem(ORDERHISTORY);
       sessionStorage.removeItem(ADDRESSES);
+      sessionStorage.removeItem(APITOKEN);
     },
-    userLoaded(state, action: PayloadAction<User>) {
-      const user = action.payload;
-      state.user = {
-        id: user.id,
-        userName: user.userName,
-      };
+    userLoaded(state, action: PayloadAction<UserState>) {
+      const userStateFromAPI = action.payload;
+      state.user = userStateFromAPI.user;
+      state.cart = userStateFromAPI.cart;
+      state.addresses = userStateFromAPI.addresses;
       state.loading = false;
 
       sessionStorage.setItem(USER, JSON.stringify(action.payload));

@@ -2,8 +2,10 @@ import { BillingMethod } from './BillingMethod';
 import { Product } from './Product';
 
 export interface User {
-  id: number;
+  userId: number;
   userName: string;
+  name?: string;
+  email?: string;
 }
 
 export interface CartItem {
@@ -46,8 +48,8 @@ export interface Order {
 
 export interface UserState {
   user: User;
-  loading: boolean;
-  error: UserErrorType[];
+  loading?: boolean;
+  error?: UserErrorType[];
   cart?: Cart;
   orderHistory?: Order[];
   addresses?: Address[];
@@ -61,6 +63,6 @@ export enum UserErrorType {
 }
 
 export interface UserLogin {
-  name: string;
+  username: string;
   password: string;
 }

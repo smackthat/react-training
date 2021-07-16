@@ -5,6 +5,7 @@ require('./models/user');
 require('./models/cartItem');
 
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
@@ -17,6 +18,7 @@ const DATABASE = process.env.DATABASE;
 const app = express();
 app.set('port', PORT);
 
+app.use(cors());
 app.use(express.json());
 
 // Setupd middlwares

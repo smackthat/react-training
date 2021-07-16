@@ -29,7 +29,7 @@ export function LoginPage() {
 
   const handleLoginClick = () => {
     const userLogin: UserLogin = {
-      name: userName,
+      username: userName,
       password,
     };
 

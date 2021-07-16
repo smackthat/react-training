@@ -3,7 +3,7 @@ import { CartItem, User, UserState } from 'types/User';
 import { currencySum } from './helpers';
 
 export const mockUser: User = {
-  id: 2,
+  userId: 2,
   userName: 'TEST',
 };
 
